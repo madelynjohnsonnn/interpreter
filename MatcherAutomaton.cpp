@@ -35,7 +35,7 @@ int MatcherAutomaton::NewLinesRead() const {
 }
 
 Token* MatcherAutomaton::CreateToken(string input, int lineNumber) {
-    return new Token(input, lineNumber);
+    return new Token(type, input, lineNumber);
 }
 
 string MatcherAutomaton::GetMatch() {

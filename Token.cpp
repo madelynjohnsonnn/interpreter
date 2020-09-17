@@ -11,12 +11,12 @@
 #include <string>
 using namespace std;
 
-Token::Token(string val, int num) {
-//    cout << "string value: " << val << ", lineNumber: " << num << endl;
-    this->value = val;
-    this->lineNum = num;
-    this->type = toToken();
-}
+//Token::Token(string val, int num) {
+////    cout << "string value: " << val << ", lineNumber: " << num << endl;
+//    this->value = val;
+//    this->lineNum = num;
+//    this->type = toToken();
+//}
 
 Token::Token(TokenType t, string val, int num) {
 //    cout << "Type: " << t << ", string value: " << val << ", lineNumber: " << num << endl;
@@ -54,6 +54,7 @@ string Token::tokenToString() {
     return "ERROR";
 }
 
+/*
 TokenType Token::toToken() {
     if (value == ",") return COMMA;
     else if (value == ".") return PERIOD;
@@ -68,7 +69,7 @@ TokenType Token::toToken() {
     else if (value == "Facts") return FACTS;
     else if (value == "Rules") return RULES;
     else if (value == "Queries") return QUERIES;
-    //ID case
+    else if (value == "") return ID;
     //string case
     //comment case
 //    else if (value == "$") return UNDEFINED; //undefined case
@@ -78,3 +79,4 @@ TokenType Token::toToken() {
     else if (value == "EOFILE") return EOFILE;
     return UNDEFINED;
 }
+*/

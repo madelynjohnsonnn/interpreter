@@ -27,7 +27,7 @@ Lexer::Lexer() {
     machines.push_back(new MatcherAutomaton("Facts", FACTS));
     machines.push_back(new MatcherAutomaton("Queries", QUERIES));
     machines.push_back(new IdAutomaton(ID));
-    //string
+    machines.push_back(new StringAutomaton(STRING));
     //comment
     //undefined
     machines.push_back(new MatcherAutomaton("\n", EOFILE));
@@ -81,7 +81,7 @@ void Lexer::run(string fileContents) {
         }
         else {
             maxRead = 1;
-            Token* newToken = new Token(UNDEFINED, fileContents.substr(0), curLineNum);
+            Token* newToken = new Token(UNDEFINED, fileContents.substr(0,1), curLineNum);
             tokens.push_back(newToken);
         }
         fileContents.erase(0, maxRead);

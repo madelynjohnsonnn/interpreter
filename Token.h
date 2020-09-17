@@ -17,14 +17,14 @@ enum TokenType {COMMA, PERIOD, Q_MARK, LEFT_PAREN, RIGHT_PAREN, COLON, COLON_DAS
 
 class Token {
 public:
-    Token(string val, int num);
+//    Token(string val, int num);
     Token(TokenType t, string val, int num);
     string toString();
 private:
     string value;
     int lineNum;
     TokenType type;
-    TokenType toToken();
+//    TokenType toToken();
     string tokenToString();
 };
 

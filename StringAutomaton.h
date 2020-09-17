@@ -12,14 +12,19 @@
 #include <stdio.h>
 #include <string>
 #include "Token.h"
+#include "Automaton.h"
 using namespace std;
 
-class StringAutomaton {
-public:
-    StringAutomaton(string s);
-    string Parse();
+class StringAutomaton : public Automaton {
 private:
-    string input;
+    
+public:
+    StringAutomaton(TokenType tokenType) : Automaton(tokenType) {
+        this->type = STRING;
+    };
+    int Read(const string& input);
+    int NewLinesRead() const;
+    Token* CreateToken(string input, int lineNumber);
 };
 
 #endif /* StringAutomaton_h */

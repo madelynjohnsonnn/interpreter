@@ -19,6 +19,8 @@ int main(int argc, const char * argv[]) {
     ifstream in(argv[1]);
     string fileContent = "";
     
+    TODo: fix end of file
+     
     while (in.peek() != EOF) {
         fileContent += in.get();
     }
@@ -31,7 +33,7 @@ int main(int argc, const char * argv[]) {
     */
     
     Lexer * lexer = new Lexer();
-    lexer->run("  :\n:(hello dad)");
+    lexer->run("'hi it''''''s me\n hi'  ");
     lexer->PrintTokens();
     
 }

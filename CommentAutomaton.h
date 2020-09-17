@@ -11,14 +11,20 @@
 
 #include <stdio.h>
 #include <string>
+#include "Automaton.h"
 using namespace std;
 
-class CommentAutomaton {
-public:
-    CommentAutomaton(string s);
-    string Parse();
+class CommentAutomaton : public Automaton {
 private:
-    string input;
+    
+public:
+    CommentAutomaton(TokenType tokenType) : Automaton(tokenType) {
+        this->type = COMMENT;
+    };
+    int Read(const string& input);
+    int NewLinesRead() const;
+    Token* CreateToken(string input, int lineNumber);
 };
+
 
 #endif /* CommentAutomaton_h */
