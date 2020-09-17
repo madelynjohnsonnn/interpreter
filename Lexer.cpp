@@ -42,7 +42,11 @@ void Lexer::run(string fileContents) {
     Automaton* maxMachine = NULL;
     
     while (fileContents.size() > 0) {
-        cout << fileContents << endl;
+        if (fileContents.at(0) == EOF) {
+            return;
+        }
+        
+//        cout << fileContents << endl;
         maxMachine = NULL;
         maxRead = 0;
         
@@ -50,7 +54,7 @@ void Lexer::run(string fileContents) {
             if (fileContents.at(0) == '\n') {
                 curLineNum++;
             }
-            cout << "erasing " << fileContents.at(0) << endl;
+//            cout << "erasing " << fileContents.at(0) << endl;
             fileContents.erase(0,1);
         }
         
@@ -65,16 +69,16 @@ void Lexer::run(string fileContents) {
                 maxRead = inputRead;
                 maxMachine = (*it);
                 maxNewLines = (*it)->NewLinesRead();
-                cout << "type: " << (*it)->GetType() << ", maxRead: " << maxRead << ", Max New lines: " << maxNewLines <<  endl;
+//                cout << "type: " << (*it)->GetType() << ", maxRead: " << maxRead << ", Max New lines: " << maxNewLines <<  endl;
             }
         }
         
         if (maxRead > 0) {
-            cout << "Creating token for " << maxMachine->GetValue() << endl;
+//            cout << "Creating token for " << maxMachine->GetValue() << endl;
             
             Token* newToken = maxMachine->CreateToken(maxMachine->GetValue(), curLineNum);
             
-            cout << "newToken: " << newToken->toString() << endl;
+//            cout << "newToken: " << newToken->toString() << endl;
             
             curLineNum += maxNewLines;
             tokens.push_back(newToken);

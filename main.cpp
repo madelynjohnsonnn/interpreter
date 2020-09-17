@@ -10,31 +10,21 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <streambuf>
 #include "Lexer.h"
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    /*
-    string nextLine;
     ifstream in(argv[1]);
-    string fileContent = "";
-    
-    TODo: fix end of file
-     
-    while (in.peek() != EOF) {
-        fileContent += in.get();
-    }
-    cout << "filecontent" << fileContent << endl;
-    
+
+    stringstream buffer;
+    buffer << in.rdbuf();
+ 
     Lexer * lexer = new Lexer();
-    cout << "running lexer" << endl;
-    
-    lexer->run(fileContent);
-    */
-    
-    
-    Lexer * lexer = new Lexer();
-    lexer->run("#| hi #| hi \n\n\n#| hi |# hi "); 
+    lexer->run(buffer.str());
     lexer->PrintTokens();
     
 }
+
+//run/interpret results
+//error checking throughout documents

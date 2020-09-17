@@ -8,6 +8,7 @@
 
 #include "MatcherAutomaton.h"
 #include <string>
+#include <iostream>
 
 //MatcherAutomaton::MatcherAutomaton(string toMatch, TokenType tokenType) {
 //    this->toMatch = toMatch;
