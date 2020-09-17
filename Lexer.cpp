@@ -28,7 +28,7 @@ Lexer::Lexer() {
     machines.push_back(new MatcherAutomaton("Queries", QUERIES));
     machines.push_back(new IdAutomaton(ID));
     machines.push_back(new StringAutomaton(STRING));
-    //comment
+    machines.push_back(new CommentAutomaton(COMMENT));
     //undefined
     machines.push_back(new MatcherAutomaton("\n", EOFILE));
 }

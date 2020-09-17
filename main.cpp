@@ -32,8 +32,9 @@ int main(int argc, const char * argv[]) {
     lexer->run(fileContent);
     */
     
+    
     Lexer * lexer = new Lexer();
-    lexer->run("'hi it''''''s me\n hi'  ");
+    lexer->run("#| hi #| hi \n\n\n#| hi |# hi "); 
     lexer->PrintTokens();
     
 }
