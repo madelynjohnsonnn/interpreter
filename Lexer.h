@@ -18,6 +18,7 @@
 #include "IdAutomaton.h"
 #include "StringAutomaton.h"
 #include "CommentAutomaton.h"
+#include "UnterminatedStringAutomaton.h"
 using namespace std;
 
 class Lexer {

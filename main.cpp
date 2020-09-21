@@ -19,8 +19,8 @@ int main(int argc, const char * argv[]) {
 //    lexer->run(filecontent);
 //    lexer->PrintTokens();
     
-//    ifstream in(argv[1]);
-    ifstream in("/Users/maddie/CODING/lab1/lab1/project1-exampleIO/in18.txt");
+    ifstream in(argv[1]);
+//    ifstream in("/Users/maddie/CODING/lab1/lab1/project1-exampleIO/in13.txt");
     stringstream buffer;
     buffer << in.rdbuf();
     

@@ -32,6 +32,7 @@ Lexer::Lexer() {
     machines.push_back(new CommentAutomaton(COMMENT));
     //undefined
     machines.push_back(new MatcherAutomaton("\n", EOFILE));
+    machines.push_back(new UnterminatedStringAutomaton(UNDEFINED));
 }
 
 

@@ -1,17 +1,17 @@
 //
-//  CommentAutomaton.cpp
+//  UnterminatedCommentAutomaton.cpp
 //  lab1
 //
-//  Created by Maddie Johnson on 9/15/20.
+//  Created by Maddie Johnson on 9/21/20.
 //  Copyright © 2020 Maddie Johnson. All rights reserved.
 //
 
-#include "CommentAutomaton.h"
+#include "UnterminatedCommentAutomaton.h"
 #include <string>
 #include <iostream>
 using namespace std;
 
-int CommentAutomaton::Read(const string& input) {
+int UnterminatedCommentAutomaton::Read(const string& input) {
     int inputRead = 0;
     string temp = input;
     value = "";
@@ -35,7 +35,7 @@ int CommentAutomaton::Read(const string& input) {
                 inputRead++;
                 temp.erase(0,1);
                 newLines++;
-                return inputRead;
+                return 0;
             }
             else if (block == true && temp.length() > 0 && temp.at(0) == '|') {
                 value += temp[0];
@@ -46,7 +46,7 @@ int CommentAutomaton::Read(const string& input) {
                     value += temp.substr(0,1);
                     inputRead ++;
                     temp.erase(0,1);
-                    return inputRead;
+                    return 0;
                 }
                 else {
                     //nothing
@@ -68,13 +68,13 @@ int CommentAutomaton::Read(const string& input) {
             }
         }
     }
-    return 0;
+    return inputRead;
 }
 
-int CommentAutomaton::NewLinesRead() const {
+int UnterminatedCommentAutomaton::NewLinesRead() const {
     return newLines;
 }
 
-Token* CommentAutomaton::CreateToken(string input, int lineNumber) {
-    return new Token(COMMENT, input, lineNumber);
+Token* UnterminatedCommentAutomaton::CreateToken(string input, int lineNumber) {
+    return new Token(UNDEFINED, input, lineNumber);
 }
