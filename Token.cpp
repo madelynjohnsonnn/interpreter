@@ -47,7 +47,7 @@ string Token::tokenToString() {
         case QUERIES: return "QUERIES"; break;
         case ID: return "ID"; break;
         case UNDEFINED: return "UNDEFINED"; break;
-        case EOFILE: return ""; break;
+        case EOFILE: return "EOF"; break;
         case STRING: return "STRING"; break;
         case COMMENT: return "COMMENT"; break;
     }

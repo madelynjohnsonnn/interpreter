@@ -8,6 +8,7 @@
 
 #include "CommentAutomaton.h"
 #include <string>
+#include <iostream>
 using namespace std;
 
 int CommentAutomaton::Read(const string& input) {
@@ -16,7 +17,7 @@ int CommentAutomaton::Read(const string& input) {
     value = "";
     bool block = false;
     
-    if (temp.at(0) == '#') {
+    if (temp.length() > 0 && temp.at(0) == '#') {
         value += temp[0];
         inputRead++;
         temp.erase(0,1);
@@ -29,10 +30,11 @@ int CommentAutomaton::Read(const string& input) {
         }
         
         while (temp.length() > 0) {
-            if (block == false && (temp.at(0) == '\n' || temp.at(0) == EOF)) {
+            if (block == false && (temp.at(0) == '\n' /*|| temp.at(0) == EOF*/)) {
                 //value += temp[0];
                 inputRead++;
                 temp.erase(0,1);
+                newLines++;
                 return inputRead;
             }
             else if (block == true && temp.length() > 0 && temp.at(0) == '|') {
@@ -56,9 +58,9 @@ int CommentAutomaton::Read(const string& input) {
                 inputRead++;
                 temp.erase(0,1);
             }
-            else if (temp.at(0) == EOF) {
-                return 0;
-            }
+//            else if (temp.at(0) == EOF) {
+//                return 0;
+//            }
             else {
                 value += temp[0];
                 inputRead++;

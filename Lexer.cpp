@@ -26,6 +26,7 @@ Lexer::Lexer() {
     machines.push_back(new MatcherAutomaton("Schemes", SCHEMES));
     machines.push_back(new MatcherAutomaton("Facts", FACTS));
     machines.push_back(new MatcherAutomaton("Queries", QUERIES));
+    machines.push_back(new MatcherAutomaton("Rules", RULES));
     machines.push_back(new IdAutomaton(ID));
     machines.push_back(new StringAutomaton(STRING));
     machines.push_back(new CommentAutomaton(COMMENT));
@@ -42,22 +43,17 @@ void Lexer::run(string fileContents) {
     Automaton* maxMachine = NULL;
     
     while (fileContents.size() > 0) {
-        if (fileContents.at(0) == EOF) {
-            return;
-        }
-        
 //        cout << fileContents << endl;
         maxMachine = NULL;
         maxRead = 0;
         
-        while (isspace(fileContents.at(0))) {
+        while (fileContents.size() > 0 && isspace(fileContents.at(0))) {
             if (fileContents.at(0) == '\n') {
                 curLineNum++;
             }
 //            cout << "erasing " << fileContents.at(0) << endl;
             fileContents.erase(0,1);
         }
-        
         
         vector <Automaton*>::iterator it;
         for (it = machines.begin(); it != machines.end(); it++) {
@@ -84,12 +80,18 @@ void Lexer::run(string fileContents) {
             tokens.push_back(newToken);
         }
         else {
-            maxRead = 1;
-            Token* newToken = new Token(UNDEFINED, fileContents.substr(0,1), curLineNum);
-            tokens.push_back(newToken);
+            if (fileContents.length() > 0) {
+                maxRead = 1;
+                Token* newToken = new Token(UNDEFINED, fileContents.substr(0,1), curLineNum);
+                tokens.push_back(newToken);
+            }
         }
         fileContents.erase(0, maxRead);
     }
+    
+    Token* newToken = new Token(EOFILE, "", curLineNum);
+    tokens.push_back(newToken);
+    
 }
 
 void Lexer::PrintTokens() {
@@ -97,4 +99,5 @@ void Lexer::PrintTokens() {
     for (it = tokens.begin(); it != tokens.end(); it++) {
         cout << (*it)->toString() << endl;
     }
+    cout << "Total Tokens = " << tokens.size() << endl;
 }

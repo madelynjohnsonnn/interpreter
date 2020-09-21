@@ -16,16 +16,16 @@ int StringAutomaton::Read(const string& input) {
     string temp = input;
     value = "";
     
-    if (temp.substr(0,1) == "'") {
+    if (temp.length() > 0 && temp.substr(0,1) == "'") {
         value += temp[0];
         inputRead++;
         temp.erase(0,1);
         
         while (temp.length() > 0) {
-            if (temp.at(0) == EOF) {
-                return 0;
-            }
-            else if (temp.substr(0,1) == "'") {
+//            if (temp.at(0) == EOF) {
+//                return 0;
+//            }
+            if (temp.substr(0,1) == "'") {
                 if (temp.length() > 0) {
                     if (temp.substr(1,1) != "'") {
                         value += temp.substr(0,1);
@@ -34,7 +34,7 @@ int StringAutomaton::Read(const string& input) {
                         return inputRead;
                     }
                     else {
-                        if (temp.substr(0,2) == "''") {
+                        if (temp.length() >= 2 && temp.substr(0,2) == "''") {
                             value += temp.substr(0,2);
                             inputRead += 2;
                             temp.erase(0,2);
@@ -43,6 +43,7 @@ int StringAutomaton::Read(const string& input) {
                             value += temp.substr(0,1);
                             inputRead++;
                             temp.erase(0,1);
+                            return inputRead;
                         }
                     }
                 }
@@ -60,7 +61,7 @@ int StringAutomaton::Read(const string& input) {
             }
         }
     }
-    return inputRead;
+    return 0;
 }
 
 int StringAutomaton::NewLinesRead() const {

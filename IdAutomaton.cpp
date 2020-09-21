@@ -19,23 +19,31 @@ int IdAutomaton::Read(const string& input) {
     string temp = input;
     value = "";
     
-    //checking keywords
-    if (temp.substr(0,7) == "Schemes" || temp.substr(0,5) == "Facts" || temp.substr(0,5) == "Rules" || temp.substr(0,7) == "Queries") {
-        return 0;
-    }
-    
-    if (isalpha(temp.at(0))) {
+    if (temp.length() > 0 && isalpha(temp.at(0))) {
         value += temp[0];
         inputRead++;
         temp.erase(0,1);
         
-        while (isalnum(temp.at(0))) {
+        while (temp.length() > 0 && isalnum(temp.at(0))) {
             value += temp.at(0);
             inputRead++;
             temp.erase(0,1);
         }
         
     }
+    
+    if (value == "Schemes" || value == "Queries" || value == "Facts" || value == "Rules") {
+        return 0;
+    }
+    
+    
+//    if (temp.length() >= 7 && (temp.substr(0,7) == "Schemes" || temp.substr(0,7) == "Queries")) {
+//        return 0;
+//    }
+//
+//    if (temp.length() >= 5 && (temp.substr(0,5) == "Facts" || temp.substr(0,5) == "Rules")) {
+//        return 0;
+//    }
     
     return inputRead;
 }
