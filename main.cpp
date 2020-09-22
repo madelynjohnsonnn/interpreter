@@ -20,14 +20,14 @@ int main(int argc, const char * argv[]) {
 //    lexer->PrintTokens();
     
     ifstream in(argv[1]);
-//    ifstream in("/Users/maddie/CODING/lab1/lab1/project1-exampleIO/in13.txt");
+//    ifstream in("/Users/maddie/CODING/lab1/lab1/project1-exampleIO/in18.txt");
     stringstream buffer;
     buffer << in.rdbuf();
     
     Lexer * lexer = new Lexer();
     lexer->run(buffer.str());
-//    lexer->run("#| hi hi \n hi hi ");
-    lexer->PrintTokens();
+//    lexer->run("'''' ");
+    lexer->PrintTokens(); 
 
 }
 

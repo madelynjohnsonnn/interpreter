@@ -15,6 +15,7 @@ int UnterminatedCommentAutomaton::Read(const string& input) {
     int inputRead = 0;
     string temp = input;
     value = "";
+    newLines = 0;
     bool block = false;
     
     if (temp.length() > 0 && temp.at(0) == '#') {
