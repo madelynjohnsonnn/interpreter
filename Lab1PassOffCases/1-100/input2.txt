@@ -1,6 +1,7 @@
-(COMMENT,"# COPYRIGHT © BRIGHAM YOUNG UNIVERSITY CS 236",1)
-(COMMENT,"# FOR USE ONLY DURING FALL 2020 SEMESTSER",2)
-(UNDEFINED,"#|
+# COPYRIGHT © BRIGHAM YOUNG UNIVERSITY CS 236
+# FOR USE ONLY DURING FALL 2020 SEMESTSER
+
+#|
 
 ############################################################
 ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -10,6 +11,3 @@
 #|
 
 #
-",4)
-(EOF,"",14)
-Total Tokens = 4

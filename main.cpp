@@ -15,21 +15,13 @@
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-//    Lexer * lexer = new Lexer();
-//    lexer->run(filecontent);
-//    lexer->PrintTokens();
-    
-    ifstream in(argv[1]);
-//    ifstream in("/Users/maddie/CODING/lab1/lab1/project1-exampleIO/in18.txt");
+//    ifstream in(argv[1]);
+    ifstream in("/Users/maddie/CODING/lab1/lab1/Lab1PassOffCases/1-100/input2.txt");
     stringstream buffer;
     buffer << in.rdbuf();
     
     Lexer * lexer = new Lexer();
     lexer->run(buffer.str());
-//    lexer->run("'''' ");
-    lexer->PrintTokens(); 
+    lexer->PrintTokens();
 
 }
-
-//run/interpret results
-//error checking throughout documents

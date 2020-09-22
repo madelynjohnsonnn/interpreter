@@ -33,6 +33,7 @@ Lexer::Lexer() {
     //undefined
     machines.push_back(new MatcherAutomaton("\n", EOFILE));
     machines.push_back(new UnterminatedStringAutomaton(UNDEFINED));
+    machines.push_back(new UnterminatedCommentAutomaton(UNDEFINED));
 }
 
 
@@ -100,5 +101,5 @@ void Lexer::PrintTokens() {
     for (it = tokens.begin(); it != tokens.end(); it++) {
         cout << (*it)->toString() << endl;
     }
-    cout << "Total Tokens = " << tokens.size() << endl;
+    cout << "Total Tokens = " << tokens.size();
 }
