@@ -6,4 +6,4 @@
 //  Copyright © 2020 Maddie Johnson. All rights reserved.
 //
 
-#include "Parameter.hpp"
+#include "Parameter.h"

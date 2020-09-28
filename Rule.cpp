@@ -6,4 +6,4 @@
 //  Copyright © 2020 Maddie Johnson. All rights reserved.
 //
 
-#include "Rule.hpp"
+#include "Rule.h"

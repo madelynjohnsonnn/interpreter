@@ -31,7 +31,7 @@ int CommentAutomaton::Read(const string& input) {
         }
         
         while (temp.length() > 0) {
-            if (block == false && (temp.at(0) == '\n' /*|| temp.at(0) == EOF*/)) {
+            if (block == false && (temp.at(0) == '\n')) {
                 //value += temp[0];
                 inputRead++;
                 temp.erase(0,1);

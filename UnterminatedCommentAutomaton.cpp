@@ -31,7 +31,7 @@ int UnterminatedCommentAutomaton::Read(const string& input) {
         }
         
         while (temp.length() > 0) {
-            if (block == false && (temp.at(0) == '\n' /*|| temp.at(0) == EOF*/)) {
+            if (block == false && temp.at(0) == '\n') {
                 //value += temp[0];
                 inputRead++;
                 temp.erase(0,1);
@@ -59,9 +59,6 @@ int UnterminatedCommentAutomaton::Read(const string& input) {
                 inputRead++;
                 temp.erase(0,1);
             }
-//            else if (temp.at(0) == EOF) {
-//                return 0;
-//            }
             else {
                 value += temp[0];
                 inputRead++;

@@ -29,7 +29,7 @@ Lexer::Lexer() {
     machines.push_back(new MatcherAutomaton("Rules", RULES));
     machines.push_back(new IdAutomaton(ID));
     machines.push_back(new StringAutomaton(STRING));
-    machines.push_back(new CommentAutomaton(COMMENT));
+    //machines.push_back(new CommentAutomaton(COMMENT));
     //undefined
     machines.push_back(new MatcherAutomaton("\n", EOFILE));
     machines.push_back(new UnterminatedStringAutomaton(UNDEFINED));
@@ -60,24 +60,15 @@ void Lexer::run(string fileContents) {
         vector <Automaton*>::iterator it;
         for (it = machines.begin(); it != machines.end(); it++) {
             inputRead = (*it)->Read(fileContents);
-            
-//            cout << "Machines: " << (*it)->GetType() << " Input read: " << inputRead << endl;
-            
             if (inputRead > maxRead) {
                 maxRead = inputRead;
                 maxMachine = (*it);
                 maxNewLines = (*it)->NewLinesRead();
-//                cout << "type: " << (*it)->GetType() << ", maxRead: " << maxRead << ", Max New lines: " << maxNewLines <<  endl;
             }
         }
         
         if (maxRead > 0) {
-//            cout << "Creating token for " << maxMachine->GetValue() << endl;
-            
             Token* newToken = maxMachine->CreateToken(maxMachine->GetValue(), curLineNum);
-            
-//            cout << "newToken: " << newToken->toString() << endl;
-            
             curLineNum += maxNewLines;
             tokens.push_back(newToken);
         }
