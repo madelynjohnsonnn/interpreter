@@ -20,12 +20,13 @@ public:
 //    Token(string val, int num);
     Token(TokenType t, string val, int num);
     string toString();
+    TokenType GetType();
+    string tokenToString();
 private:
     string value;
     int lineNum;
     TokenType type;
-//    TokenType toToken();
-    string tokenToString();
+    //TokenType toToken();
 };
 
 

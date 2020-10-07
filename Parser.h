@@ -10,13 +10,15 @@
 #define Parser_h
 
 #include <stdio.h>
+#include <vector>
 #include "Token.h"
+#include "Parser.h"
 using namespace std;
 
 class Parser {
 public:
-    Parser();
-    void Match(TokenType t);
+    Parser(vector <Token*> t);
+    void Match(TokenType type);
     void Parse();
     void ParseDatalogProgram();
     void ParseSchemeList();
@@ -35,9 +37,12 @@ public:
     void ParseIdList();
     void ParseParameter();
     void ParseExpression();
-    void ParseOperater();
+    void ParseOperator();
+    void ParseEOF();
+    void PrintDatalog();
 private:
-    
+    vector <Token*> tokens;
+    int index;
 };
 
 #endif /* Parser_h */

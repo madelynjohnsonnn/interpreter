@@ -29,7 +29,7 @@ Lexer::Lexer() {
     machines.push_back(new MatcherAutomaton("Rules", RULES));
     machines.push_back(new IdAutomaton(ID));
     machines.push_back(new StringAutomaton(STRING));
-    //machines.push_back(new CommentAutomaton(COMMENT));
+    machines.push_back(new CommentAutomaton(COMMENT));
     //undefined
     machines.push_back(new MatcherAutomaton("\n", EOFILE));
     machines.push_back(new UnterminatedStringAutomaton(UNDEFINED));
@@ -70,21 +70,26 @@ void Lexer::run(string fileContents) {
         if (maxRead > 0) {
             Token* newToken = maxMachine->CreateToken(maxMachine->GetValue(), curLineNum);
             curLineNum += maxNewLines;
-            tokens.push_back(newToken);
+            if (newToken != NULL) {
+                tokens.push_back(newToken);
+            }
         }
         else {
             if (fileContents.length() > 0) {
                 maxRead = 1;
                 Token* newToken = new Token(UNDEFINED, fileContents.substr(0,1), curLineNum);
-                tokens.push_back(newToken);
+                if (newToken != NULL) {
+                    tokens.push_back(newToken);
+                }
             }
         }
         fileContents.erase(0, maxRead);
     }
     
     Token* newToken = new Token(EOFILE, "", curLineNum);
-    tokens.push_back(newToken);
-    
+    if (newToken != NULL) {
+        tokens.push_back(newToken);
+    }
 }
 
 void Lexer::PrintTokens() {
@@ -93,4 +98,8 @@ void Lexer::PrintTokens() {
         cout << (*it)->toString() << endl;
     }
     cout << "Total Tokens = " << tokens.size();
+}
+
+vector <Token*> Lexer::GetTokens() {
+    return tokens;
 }

@@ -54,6 +54,10 @@ string Token::tokenToString() {
     return "ERROR";
 }
 
+TokenType Token::GetType() {
+    return type;
+}
+
 /*
 TokenType Token::toToken() {
     if (value == ",") return COMMA;

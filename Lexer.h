@@ -27,6 +27,7 @@ public:
     Lexer();
     void run(string fileContents);
     void PrintTokens();
+    vector <Token*> GetTokens();
 private:
     vector <Token*> tokens;
     vector <Automaton*> machines;

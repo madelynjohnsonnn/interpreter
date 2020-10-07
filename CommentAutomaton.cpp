@@ -77,5 +77,6 @@ int CommentAutomaton::NewLinesRead() const {
 }
 
 Token* CommentAutomaton::CreateToken(string input, int lineNumber) {
-    return new Token(COMMENT, input, lineNumber);
+    //return new Token(COMMENT, input, lineNumber);
+    return NULL;
 }
