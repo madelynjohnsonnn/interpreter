@@ -22,6 +22,7 @@ public:
     string toString();
     TokenType GetType();
     string tokenToString();
+    string GetString();
 private:
     string value;
     int lineNum;

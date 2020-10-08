@@ -1,6 +1,6 @@
 //
 //  Rule.h
-//  lab1
+//  lab2
 //
 //  Created by Maddie Johnson on 9/27/20.
 //  Copyright © 2020 Maddie Johnson. All rights reserved.
@@ -10,5 +10,12 @@
 #define Rule_h
 
 #include <stdio.h>
+
+class Rule {
+public:
+    void toString();
+private:
+    
+};
 
 #endif /* Rule_h */

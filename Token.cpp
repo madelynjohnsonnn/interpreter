@@ -58,6 +58,10 @@ TokenType Token::GetType() {
     return type;
 }
 
+string Token::GetString() {
+    return value;
+}
+
 /*
 TokenType Token::toToken() {
     if (value == ",") return COMMA;

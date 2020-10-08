@@ -11,8 +11,14 @@
 
 #include <stdio.h>
 #include <vector>
+#include <set>
 #include "Token.h"
 #include "Parser.h"
+#include "Predicate.h"
+#include "Rule.h"
+#include "PlainParameter.h"
+#include "Expression.h"
+#include "DatalogProgram.h"
 using namespace std;
 
 class Parser {
@@ -21,10 +27,10 @@ public:
     void Match(TokenType type);
     void Parse();
     void ParseDatalogProgram();
-    void ParseSchemeList();
-    void ParseFactList();
-    void ParseRuleList();
-    void ParseQueryList();
+    /*vector <Predicate>*/ void ParseSchemeList();
+    /*vector <Predicate>*/ void ParseFactList();
+    /*vector <Rule>*/ void ParseRuleList();
+    /*vector <Predicate>*/ void ParseQueryList();
     void ParseScheme();
     void ParseFact();
     void ParseRule();
@@ -34,15 +40,22 @@ public:
     void ParsePredicateList();
     void ParseParameterList();
     void ParseStringList();
-    void ParseIdList();
+    void ParseIdList(Predicate* &p);
     void ParseParameter();
     void ParseExpression();
     void ParseOperator();
     void ParseEOF();
-    void PrintDatalog();
+    void Domain(string);
+    void PrintDomain();
+    DatalogProgram* GetDatalog() {
+        return datalog;
+    }
 private:
     vector <Token*> tokens;
     int index;
+    set <string> domains;
+    vector <Predicate*> predicates;
+    DatalogProgram* datalog;
 };
 
 #endif /* Parser_h */

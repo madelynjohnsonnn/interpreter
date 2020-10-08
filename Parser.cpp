@@ -7,6 +7,7 @@
 //
 
 #include "Parser.h"
+#include "Parameter.h"
 #include <vector>
 #include <iostream>
 using namespace std;
@@ -14,6 +15,7 @@ using namespace std;
 Parser::Parser(vector <Token*> t) {
     index = 0;
     tokens = t;
+    datalog = new DatalogProgram(domains);
 }
 
 //TODO Datalog Parse();
@@ -69,6 +71,28 @@ void Parser::ParseSchemeList() {
     }
 }
 
+/*Predicate* Parser::ParseScheme() {
+    if (tokens.at(index)->GetType() == ID) {
+        Predicate* p = new Predicate();
+        return ParseScheme(p);
+    }
+    throw tokens.at(index);
+}*/
+
+void Parser::ParseScheme() {
+    //ID LEFT_PAREN ID idList RIGHT_PAREN
+    Predicate* p = new Predicate();
+    Match(ID);
+    p->SetName(tokens.at(index - 1)->GetString());
+    Match(LEFT_PAREN);
+    Match(ID);
+    Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+    p->parameters.push_back(par);
+    ParseIdList(p);
+    Match(RIGHT_PAREN);
+    datalog->schemes.push_back(p);
+}
+
 void Parser::ParseFactList() {
     //fact factList | lambda
     if (tokens.at(index)->GetType() == ID) {
@@ -93,19 +117,13 @@ void Parser::ParseQueryList() {
     }
 }
 
-void Parser::ParseScheme() {
-    //ID LEFT_PAREN ID idList RIGHT_PAREN
-    Match(ID);
-    Match(LEFT_PAREN);
-    Match(ID);
-    ParseIdList();
-    Match(RIGHT_PAREN);
-}
-
 void Parser::ParseFact() {
     //ID LEFT_PAREN STRING stringList RIGHT_PAREN PERIOD
     Match(ID);
     Match(LEFT_PAREN);
+    if (tokens.at(index)->GetType() == STRING) {
+        Domain(tokens.at(index)->GetString());
+    }
     Match(STRING);
     ParseStringList();
     Match(RIGHT_PAREN);
@@ -132,7 +150,8 @@ void Parser::ParseHeadPredicate() {
     Match(ID);
     Match(LEFT_PAREN);
     Match(ID);
-    ParseIdList();
+    //TODO FIX THIS
+    //ParseIdList(NULL);
     Match(RIGHT_PAREN);
 }
 
@@ -167,17 +186,24 @@ void Parser::ParseStringList() {
     //COMMA STRING stringList | lambda
     if (tokens.size() >= index && tokens.at(index)->GetType() == COMMA) {
         Match(COMMA);
+        if (tokens.at(index)->GetType() == STRING) {
+            Domain(tokens.at(index)->GetString());
+        }
         Match(STRING);
         ParseStringList();
     }
 }
 
-void Parser::ParseIdList() {
+void Parser::ParseIdList(Predicate* &p) {
     //COMMA ID idList | lambda
     if (tokens.size() >= index && tokens.at(index)->GetType() == COMMA) {
         Match(COMMA);
         Match(ID);
-        ParseIdList();
+        
+        Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+        p->parameters.push_back(par);
+        
+        ParseIdList(p);
     }
 }
 
@@ -227,7 +253,14 @@ void Parser::ParseEOF() {
     Match(EOFILE);
 }
 
-void Parser::PrintDatalog() {
-    cout << "Success!" << endl;
-    
+void Parser::Domain(string s) {
+    domains.insert(s);
+}
+
+void Parser::PrintDomain() {
+    cout << "Domains(" << domains.size() << "):" << endl;
+    set <string>::iterator it;
+    for (it = domains.begin(); it != domains.end(); it++) {
+        cout << "\t" << *it << endl;
+    }
 }

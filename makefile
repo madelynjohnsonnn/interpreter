@@ -1,2 +1,2 @@
 compile:
-	g++ -Wall -Werror -std=c++17 -g *.cpp -o mylab
+	g++ -Wall -Werror -std=c++17 -g *.cpp -o lab
