@@ -22,29 +22,29 @@ void DatalogProgram::toString() {
     vector <Predicate*>::iterator it;
     for (it = schemes.begin(); it != schemes.end(); it++) {
         (*it)->toString(); //calling predicate tostring
-        cout << ")" << endl;
+        cout << endl;
     }
     
     
     cout << "Facts(" << facts.size() << "):" << endl;
     for (it = facts.begin(); it != facts.end(); it++) {
         (*it)->toString();
-        cout << ")." << endl;
+        cout << "." << endl;
     }
-    
     
     cout << "Rules(" << rules.size() << "):" << endl;
     vector <Rule*>::iterator it2;
     for (it2 = rules.begin(); it2 != rules.end(); it2++) {
-        (*it)->toString();
+        (*it2)->toString();
     }
     
     cout << "Queries(" << queries.size() << "):" << endl;
     for (it = queries.begin(); it != queries.end(); it++) {
         (*it)->toString();
+        cout << "?" << endl;
     }
     
-    cout << "Domains(" << domains.size() << "):" << endl;
+    cout << "Domain(" << domains.size() << "):" << endl;
     set <string>::iterator it3;
     for (it3 = domains.begin(); it3 != domains.end(); it3++) {
         cout << "  " << *it3 << endl;

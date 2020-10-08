@@ -23,10 +23,12 @@ public:
     void SetName(string n) {
         name = n;
     }
+    string GetName() {
+        return name;
+    }
     vector <Parameter*> parameters;
 private:
     string name;
-    
 };
 
 #endif /* Predicate_h */

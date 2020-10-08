@@ -28,32 +28,37 @@ public:
     void Parse();
     void ParseDatalogProgram();
     void ParseSchemeList();
-    /*vector <Predicate>*/ void ParseFactList();
-    /*vector <Rule>*/ void ParseRuleList();
-    /*vector <Predicate>*/ void ParseQueryList();
+    void ParseFactList();
+    //void ParseRuleList(Rule* &r);
+    void ParseRuleList();
+    void ParseQueryList();
     void ParseScheme();
-    void ParseFact();
-    void ParseRule();
+    Predicate* ParseFact();
+    Rule* ParseRule();
     void ParseQuery();
-    void ParseHeadPredicate();
-    void ParsePredicate();
-    void ParsePredicateList();
+    Predicate* ParseHeadPredicate();
     void ParseParameterList(Predicate* &p);
     void ParseStringList(Predicate* &p);
     void ParseIdList(Predicate* &p);
-    void ParseParameter(Predicate* &p);
-    void ParseExpression(Predicate* &p);
-    void ParseOperator(Predicate* &p);
+    Parameter* ParseParameter();
     void ParseEOF();
     void Domain(string);
     DatalogProgram* GetDatalog() {
         return datalog;
     }
+    
+    Predicate* ParseBodyPredicate();
+    Parameter* ParseExpression();
+    string ParseOperator();
+    void ParseIdList(Rule* &r);
+    Predicate* ParsePredicate();
+    void ParsePredicateList(Rule* &r);
+    
 private:
     vector <Token*> tokens;
     int index;
     set <string> domain;
-    vector <Predicate*> predicates;
+    //vector <Predicate*> predicates;
     DatalogProgram* datalog;
 };
 

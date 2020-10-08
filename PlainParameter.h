@@ -22,9 +22,9 @@ public:
     virtual void toString() {
         cout << value;
     }
-    virtual void SetLeft(string l) {}
-    virtual void SetRight(string r) {}
-    virtual void SetOp(string o) {}
+//    virtual void SetLeft(string l) {}
+//    virtual void SetRight(string r) {}
+//    virtual void SetOp(string o) {}
 private:
     string value;
 };

@@ -27,4 +27,5 @@ void Predicate::toString() {
             cout << ",";
         }
     }
+    cout << ")";
 }

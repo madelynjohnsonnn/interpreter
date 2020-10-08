@@ -10,12 +10,29 @@
 #define Rule_h
 
 #include <stdio.h>
+#include <vector>
+#include "Parameter.h"
+#include "Predicate.h"
+#include <iostream>
+using namespace std;
 
-class Rule {
+class Rule{
 public:
-    void toString();
-private:
+    Rule() {}
     
+    void SetHeadPredicate(Predicate* n) {
+        headPredicate = n;
+    }
+    
+    void AddBodyPredicate(Predicate* bp) {
+        bodyPredicates.push_back(bp);
+    }
+    
+    void toString();
+    //vector <Parameter*> parameters;
+private:
+    Predicate* headPredicate;
+    vector <Predicate*> bodyPredicates;
 };
 
 #endif /* Rule_h */

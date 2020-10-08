@@ -18,9 +18,9 @@ class Parameter {
 public:
     virtual void toString() {}
     bool isConstant(TokenType type);
-    virtual void SetLeft(string l) = 0;
-    virtual void SetRight(string r)= 0;
-    virtual void SetOp(string o)= 0;
+//    virtual void SetLeft(string l) = 0;
+//    virtual void SetRight(string r) = 0;
+//    virtual void SetOp(string o) = 0;
 private:
     
 };

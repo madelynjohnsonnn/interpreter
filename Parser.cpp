@@ -23,6 +23,7 @@ Parser::Parser(vector <Token*> t) {
 void Parser::Parse() {
     try {
         ParseDatalogProgram();
+        datalog->toString();
     }
     catch (Token* error) {
         cout << "Failure!" << endl;
@@ -86,7 +87,7 @@ void Parser::ParseSchemeList() {
     }
 }
 
-void Parser::ParseFact() {
+Predicate* Parser::ParseFact() {
     //ID LEFT_PAREN STRING stringList RIGHT_PAREN PERIOD
     Predicate* p = new Predicate();
     Match(ID);
@@ -101,38 +102,57 @@ void Parser::ParseFact() {
     ParseStringList(p);
     Match(RIGHT_PAREN);
     Match(PERIOD);
-    datalog->facts.push_back(p);
+    return p;
 }
 
 void Parser::ParseFactList() {
     //fact factList | lambda
     if (tokens.at(index)->GetType() == ID) {
-        ParseFact();
+        Predicate* p = ParseFact();
+        datalog->facts.push_back(p);
         ParseFactList();
     }
 }
 
-void Parser::ParseRule() {
+Rule* Parser::ParseRule() {
     //headPredicate COLON_DASH predicate predicateList PERIOD
-    ParseHeadPredicate();
+    Rule* rule = new Rule();
+    Predicate* hp = ParseHeadPredicate();
+    rule->SetHeadPredicate(hp);
     Match(COLON_DASH);
-    ParsePredicate();
-    ParsePredicateList();
+    Predicate* bp = ParseBodyPredicate();
+    rule->AddBodyPredicate(bp);
+    ParsePredicateList(rule);
+    datalog->rules.push_back(rule);
     Match(PERIOD);
+    return rule;
 }
 
 void Parser::ParseRuleList() {
     //rule ruleList | lambda
     if (tokens.at(index)->GetType() == ID) {
+        //Rule* r = new Rule();
         ParseRule();
         ParseRuleList();
     }
 }
 
+/*
+ void Parser::ParseRuleList(Rule* &r) {
+    //rule ruleList | lambda
+    if (tokens.at(index)->GetType() == ID) {
+        Rule* r = ParseRule();
+        ParseRuleList(r);
+    }
+}
+*/
+
 void Parser::ParseQuery() {
     //predicate Q_MARK
-    ParsePredicate();
+    Predicate* p = new Predicate();
+    p = ParsePredicate();
     Match(Q_MARK);
+    datalog->queries.push_back(p);
 }
 
 void Parser::ParseQueryList() {
@@ -143,63 +163,63 @@ void Parser::ParseQueryList() {
     }
 }
 
-void Parser::ParseHeadPredicate() {
+Predicate* Parser::ParseHeadPredicate() {
     //ID LEFT_PAREN ID idList RIGHT_PAREN
-    Match(ID);
-    Match(LEFT_PAREN);
-    Match(ID);
-    //TODO FIX THIS
-    //ParseIdList(NULL);
-    Match(RIGHT_PAREN);
-}
-
-void Parser::ParsePredicate() {
-    //ID LEFT_PAREN parameter parameterList RIGHT_PAREN
     Predicate* p = new Predicate();
     Match(ID);
     p->SetName(tokens.at(index - 1)->GetString());
     Match(LEFT_PAREN);
-    ParseParameter(p);
+    Match(ID);
+    Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+    p->parameters.push_back(par);
+    ParseIdList(p);
+    Match(RIGHT_PAREN);
+    return p;
+}
+
+Predicate* Parser::ParsePredicate() {
+    //ID LEFT_PAREN parameter parameterList RIGHT_PAREN
+    Predicate* p = new Predicate();
+    Match(ID);
+    p->SetName(tokens.at(index - 1)->GetString());
+    //r->AddBodyPredicate(tokens.at(index - 1)->GetString());
+    Match(LEFT_PAREN);
+    Parameter* par = ParseParameter();
+    p->parameters.push_back(par);
     ParseParameterList(p);
     Match(RIGHT_PAREN);
+    return p;
 }
 
-void Parser::ParsePredicateList() {
-    //COMMA predicate predicateList | lambda
-    if (tokens.size() >= index && tokens.at(index)->GetType() == COMMA) {
-        Match(COMMA);
-        ParsePredicate();
-        ParsePredicateList();
-    }
-}
-
-void Parser::ParseParameter(Predicate* &p) {
+Parameter* Parser::ParseParameter() {
     //STRING | ID | expression
     if (tokens.size() >= index) {
         if (tokens.at(index)->GetType() == STRING) {
             Match(STRING);
             Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
-            p->parameters.push_back(par);
+            return par;
         }
         else if (tokens.at(index)->GetType() == ID) {
             Match(ID);
             Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
-            p->parameters.push_back(par);
+            return par;
         }
         else if (tokens.at(index)->GetType() == LEFT_PAREN) {
-            ParseExpression(p);
+            return ParseExpression();
         }
         else {
             throw tokens.at(index);
         }
     }
+    return NULL; //shouldn't reach here
 }
 
 void Parser::ParseParameterList(Predicate* &p) {
     //COMMA parameter parameterList | lambda
     if (tokens.size() >= index && tokens.at(index)->GetType() == COMMA) {
         Match(COMMA);
-        ParseParameter(p);
+        Parameter* par = ParseParameter();
+        p->parameters.push_back(par);
         ParseParameterList(p);
     }
 }
@@ -233,36 +253,6 @@ void Parser::ParseIdList(Predicate* &p) {
     }
 }
 
-void Parser::ParseExpression(Predicate* &p) {
-    //LEFT_PAREN parameter operator parameter RIGHT_PAREN
-    Match(LEFT_PAREN);
-    ParseParameter(p);
-    ParseOperator(p);
-    ParseParameter(p);
-    Match(RIGHT_PAREN);
-}
-
-void Parser::ParseOperator(Predicate* &p) {
-    //ADD | MULTIPLY
-    if (tokens.size() >= index) {
-        if (tokens.at(index)->GetType() == ADD) {
-            Match(ADD);
-            Parameter* par = new Expression();
-            par->SetOp(tokens.at(index - 1)->GetString());
-            p->parameters.push_back(par);
-        }
-        else if (tokens.at(index)->GetType() == MULTIPLY) {
-            Match(MULTIPLY);
-            Parameter* par = new Expression();
-            par->SetOp(tokens.at(index - 1)->GetString());
-            p->parameters.push_back(par);
-        }
-        else {
-            throw tokens.at(index);
-        }
-    }
-}
-
 void Parser::ParseEOF() {
     Match(EOFILE);
 }
@@ -271,3 +261,63 @@ void Parser::Domain(string s) {
     domain.insert(s);
 }
 
+
+
+//RULE STUFF
+
+Predicate* Parser::ParseBodyPredicate() {
+    //ID LEFT_PAREN parameter parameterList RIGHT_PAREN
+    Predicate* p = new Predicate();
+    Match(ID);
+    p->SetName(tokens.at(index - 1)->GetString());
+    //r->AddBodyPredicate(tokens.at(index - 1)->GetString());
+    Match(LEFT_PAREN);
+    Parameter* par = ParseParameter();
+    p->parameters.push_back(par);
+    ParseParameterList(p);
+    Match(RIGHT_PAREN);
+    return p;
+}
+
+Parameter* Parser::ParseExpression() {
+    //LEFT_PAREN parameter operator parameter RIGHT_PAREN
+    Match(LEFT_PAREN);
+    Parameter* left = ParseParameter();
+    string op = ParseOperator();
+    Parameter* right = ParseParameter();
+    Match(RIGHT_PAREN);
+    Expression* ex = new Expression(left, right, op);
+    return ex;
+}
+
+string Parser::ParseOperator() {
+    //ADD | MULTIPLY
+    if (tokens.size() >= index) {
+        if (tokens.at(index)->GetType() == ADD) {
+            Match(ADD);
+            return tokens.at(index - 1)->GetString();
+        }
+        else if (tokens.at(index)->GetType() == MULTIPLY) {
+            Match(MULTIPLY);
+            return tokens.at(index - 1)->GetString();
+//            par->SetOp(tokens.at(index - 1)->GetString());
+//            Predicate* p = new Predicate();
+//            p->parameters.push_back(par);
+//            datalog->rules.push_back(p);
+        }
+        else {
+            throw tokens.at(index);
+        }
+    }
+    return NULL;
+}
+
+void Parser::ParsePredicateList(Rule* &r) {
+    //COMMA predicate predicateList | lambda
+    if (tokens.size() >= index && tokens.at(index)->GetType() == COMMA) {
+        Match(COMMA);
+        Predicate* p = ParsePredicate();
+        r->AddBodyPredicate(p);
+        ParsePredicateList(r);
+    }
+}
