@@ -15,7 +15,7 @@ using namespace std;
 Parser::Parser(vector <Token*> t) {
     index = 0;
     tokens = t;
-    datalog = new DatalogProgram(domains);
+    datalog = new DatalogProgram(domain);
 }
 
 //TODO Datalog Parse();
@@ -53,6 +53,7 @@ void Parser::ParseDatalogProgram() {
     Match(FACTS);
     Match(COLON);
     ParseFactList();
+    datalog->SetDomain(domain);
     Match(RULES);
     Match(COLON);
     ParseRuleList();
@@ -62,22 +63,6 @@ void Parser::ParseDatalogProgram() {
     ParseQueryList();
     ParseEOF();
 }
-
-void Parser::ParseSchemeList() {
-    //scheme schemeList | lambda
-    if (tokens.at(index)->GetType() == ID) {
-        ParseScheme();
-        ParseSchemeList();
-    }
-}
-
-/*Predicate* Parser::ParseScheme() {
-    if (tokens.at(index)->GetType() == ID) {
-        Predicate* p = new Predicate();
-        return ParseScheme(p);
-    }
-    throw tokens.at(index);
-}*/
 
 void Parser::ParseScheme() {
     //ID LEFT_PAREN ID idList RIGHT_PAREN
@@ -93,41 +78,38 @@ void Parser::ParseScheme() {
     datalog->schemes.push_back(p);
 }
 
+void Parser::ParseSchemeList() {
+    //scheme schemeList | lambda
+    if (tokens.at(index)->GetType() == ID) {
+        ParseScheme();
+        ParseSchemeList();
+    }
+}
+
+void Parser::ParseFact() {
+    //ID LEFT_PAREN STRING stringList RIGHT_PAREN PERIOD
+    Predicate* p = new Predicate();
+    Match(ID);
+    p->SetName(tokens.at(index - 1)->GetString());
+    Match(LEFT_PAREN);
+    if (tokens.at(index)->GetType() == STRING) {
+        Domain(tokens.at(index)->GetString());
+    }
+    Match(STRING);
+    Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+    p->parameters.push_back(par);
+    ParseStringList(p);
+    Match(RIGHT_PAREN);
+    Match(PERIOD);
+    datalog->facts.push_back(p);
+}
+
 void Parser::ParseFactList() {
     //fact factList | lambda
     if (tokens.at(index)->GetType() == ID) {
         ParseFact();
         ParseFactList();
     }
-}
-
-void Parser::ParseRuleList() {
-    //rule ruleList | lambda
-    if (tokens.at(index)->GetType() == ID) {
-        ParseRule();
-        ParseRuleList();
-    }
-}
-
-void Parser::ParseQueryList() {
-    //query queryList | lambda
-    if (tokens.at(index)->GetType() == ID) {
-        ParseQuery();
-        ParseQueryList();
-    }
-}
-
-void Parser::ParseFact() {
-    //ID LEFT_PAREN STRING stringList RIGHT_PAREN PERIOD
-    Match(ID);
-    Match(LEFT_PAREN);
-    if (tokens.at(index)->GetType() == STRING) {
-        Domain(tokens.at(index)->GetString());
-    }
-    Match(STRING);
-    ParseStringList();
-    Match(RIGHT_PAREN);
-    Match(PERIOD);
 }
 
 void Parser::ParseRule() {
@@ -139,10 +121,26 @@ void Parser::ParseRule() {
     Match(PERIOD);
 }
 
+void Parser::ParseRuleList() {
+    //rule ruleList | lambda
+    if (tokens.at(index)->GetType() == ID) {
+        ParseRule();
+        ParseRuleList();
+    }
+}
+
 void Parser::ParseQuery() {
     //predicate Q_MARK
     ParsePredicate();
     Match(Q_MARK);
+}
+
+void Parser::ParseQueryList() {
+    //query queryList | lambda
+    if (tokens.at(index)->GetType() == ID) {
+        ParseQuery();
+        ParseQueryList();
+    }
 }
 
 void Parser::ParseHeadPredicate() {
@@ -157,10 +155,12 @@ void Parser::ParseHeadPredicate() {
 
 void Parser::ParsePredicate() {
     //ID LEFT_PAREN parameter parameterList RIGHT_PAREN
+    Predicate* p = new Predicate();
     Match(ID);
+    p->SetName(tokens.at(index - 1)->GetString());
     Match(LEFT_PAREN);
-    ParseParameter();
-    ParseParameterList();
+    ParseParameter(p);
+    ParseParameterList(p);
     Match(RIGHT_PAREN);
 }
 
@@ -173,24 +173,50 @@ void Parser::ParsePredicateList() {
     }
 }
 
-void Parser::ParseParameterList() {
-    //COMMA parameter parameterList | lambda
-    if (tokens.size() >= index && tokens.at(index)->GetType() == COMMA) {
-        Match(COMMA);
-        ParseParameter();
-        ParseParameterList();
+void Parser::ParseParameter(Predicate* &p) {
+    //STRING | ID | expression
+    if (tokens.size() >= index) {
+        if (tokens.at(index)->GetType() == STRING) {
+            Match(STRING);
+            Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+            p->parameters.push_back(par);
+        }
+        else if (tokens.at(index)->GetType() == ID) {
+            Match(ID);
+            Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+            p->parameters.push_back(par);
+        }
+        else if (tokens.at(index)->GetType() == LEFT_PAREN) {
+            ParseExpression(p);
+        }
+        else {
+            throw tokens.at(index);
+        }
     }
 }
 
-void Parser::ParseStringList() {
+void Parser::ParseParameterList(Predicate* &p) {
+    //COMMA parameter parameterList | lambda
+    if (tokens.size() >= index && tokens.at(index)->GetType() == COMMA) {
+        Match(COMMA);
+        ParseParameter(p);
+        ParseParameterList(p);
+    }
+}
+
+void Parser::ParseStringList(Predicate* &p) {
     //COMMA STRING stringList | lambda
     if (tokens.size() >= index && tokens.at(index)->GetType() == COMMA) {
         Match(COMMA);
+        
         if (tokens.at(index)->GetType() == STRING) {
             Domain(tokens.at(index)->GetString());
         }
         Match(STRING);
-        ParseStringList();
+        Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+        p->parameters.push_back(par);
+        
+        ParseStringList(p);
     }
 }
 
@@ -207,41 +233,29 @@ void Parser::ParseIdList(Predicate* &p) {
     }
 }
 
-void Parser::ParseParameter() {
-    //STRING | ID | expression
-    if (tokens.size() >= index) {
-        if (tokens.at(index)->GetType() == STRING) {
-            Match(STRING);
-        }
-        else if (tokens.at(index)->GetType() == ID) {
-            Match(ID);
-        }
-        else if (tokens.at(index)->GetType() == LEFT_PAREN) {
-            ParseExpression();
-        }
-        else {
-            throw tokens.at(index);
-        }
-    }
-}
-
-void Parser::ParseExpression() {
+void Parser::ParseExpression(Predicate* &p) {
     //LEFT_PAREN parameter operator parameter RIGHT_PAREN
     Match(LEFT_PAREN);
-    ParseParameter();
-    ParseOperator();
-    ParseParameter();
+    ParseParameter(p);
+    ParseOperator(p);
+    ParseParameter(p);
     Match(RIGHT_PAREN);
 }
 
-void Parser::ParseOperator() {
+void Parser::ParseOperator(Predicate* &p) {
     //ADD | MULTIPLY
     if (tokens.size() >= index) {
         if (tokens.at(index)->GetType() == ADD) {
             Match(ADD);
+            Parameter* par = new Expression();
+            par->SetOp(tokens.at(index - 1)->GetString());
+            p->parameters.push_back(par);
         }
         else if (tokens.at(index)->GetType() == MULTIPLY) {
             Match(MULTIPLY);
+            Parameter* par = new Expression();
+            par->SetOp(tokens.at(index - 1)->GetString());
+            p->parameters.push_back(par);
         }
         else {
             throw tokens.at(index);
@@ -254,13 +268,6 @@ void Parser::ParseEOF() {
 }
 
 void Parser::Domain(string s) {
-    domains.insert(s);
+    domain.insert(s);
 }
 
-void Parser::PrintDomain() {
-    cout << "Domains(" << domains.size() << "):" << endl;
-    set <string>::iterator it;
-    for (it = domains.begin(); it != domains.end(); it++) {
-        cout << "\t" << *it << endl;
-    }
-}

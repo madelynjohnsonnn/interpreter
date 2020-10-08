@@ -32,7 +32,6 @@ int main(int argc, const char * argv[]) {
     parser->Parse();
     
     parser->GetDatalog()->toString();
-    parser->PrintDomain();
     
     delete lexer;
     delete parser;

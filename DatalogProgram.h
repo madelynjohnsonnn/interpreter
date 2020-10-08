@@ -19,14 +19,16 @@ using namespace std;
 
 class DatalogProgram {
 public:
-    DatalogProgram(set <string> domains);
+    DatalogProgram(set <string> d);
     void toString();
+    void SetDomain(set <string> d);
     vector <Predicate*> schemes;
     vector <Predicate*> facts;
     vector <Predicate*> queries;
     vector <Rule*> rules;
-private:
     set <string> domains; //only appears in the facts
+private:
+    
 };
 
 #endif /* DatalogProgram_h */

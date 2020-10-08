@@ -16,7 +16,21 @@ using namespace std;
 
 class Expression : public Parameter {
 public:
-    Expression();
+    Expression(string l, string r, string o) : Parameter() {
+        left = l;
+        right = r;
+        op = o;
+    }
+    Expression() : Parameter() {}
+    virtual void SetLeft(string l) {
+        left = l;
+    }
+    virtual void SetRight(string r) {
+        right = r;
+    }
+    virtual void SetOp(string o) {
+        op = o;
+    }
     virtual void toString() {
         cout << left << op << right;
     }

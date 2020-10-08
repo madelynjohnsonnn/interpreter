@@ -27,7 +27,7 @@ public:
     void Match(TokenType type);
     void Parse();
     void ParseDatalogProgram();
-    /*vector <Predicate>*/ void ParseSchemeList();
+    void ParseSchemeList();
     /*vector <Predicate>*/ void ParseFactList();
     /*vector <Rule>*/ void ParseRuleList();
     /*vector <Predicate>*/ void ParseQueryList();
@@ -38,22 +38,21 @@ public:
     void ParseHeadPredicate();
     void ParsePredicate();
     void ParsePredicateList();
-    void ParseParameterList();
-    void ParseStringList();
+    void ParseParameterList(Predicate* &p);
+    void ParseStringList(Predicate* &p);
     void ParseIdList(Predicate* &p);
-    void ParseParameter();
-    void ParseExpression();
-    void ParseOperator();
+    void ParseParameter(Predicate* &p);
+    void ParseExpression(Predicate* &p);
+    void ParseOperator(Predicate* &p);
     void ParseEOF();
     void Domain(string);
-    void PrintDomain();
     DatalogProgram* GetDatalog() {
         return datalog;
     }
 private:
     vector <Token*> tokens;
     int index;
-    set <string> domains;
+    set <string> domain;
     vector <Predicate*> predicates;
     DatalogProgram* datalog;
 };
