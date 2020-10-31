@@ -31,9 +31,12 @@ public:
     void SetOp(string o) {
         op = o;
     }
-    void toString() {
-        //todo
-        cout << left << op << right;
+    virtual void toString() {
+        cout << "(";
+        left->toString();
+        cout << op;
+        right->toString();
+        cout << ")";
     }
 private:
     Parameter* left;

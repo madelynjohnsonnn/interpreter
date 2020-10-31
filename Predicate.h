@@ -27,8 +27,9 @@ public:
         return name;
     }
     vector <Parameter*> parameters;
-private:
     string name;
+private:
+    
 };
 
 #endif /* Predicate_h */

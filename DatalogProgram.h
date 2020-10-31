@@ -19,6 +19,7 @@ using namespace std;
 
 class DatalogProgram {
 public:
+    DatalogProgram();
     DatalogProgram(set <string> d);
     void toString();
     void SetDomain(set <string> d);

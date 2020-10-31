@@ -11,7 +11,7 @@
 void Rule::toString() {
     cout << "  " << headPredicate->GetName() << "(";
     vector <Parameter*>::iterator it;
-    int i = 0;
+    unsigned int i = 0;
     for (it = headPredicate->parameters.begin(); it != headPredicate->parameters.end(); it++) {
         (*it)->toString();
         i++;
@@ -23,7 +23,7 @@ void Rule::toString() {
     cout << ") :- ";
     
     vector <Predicate*>::iterator it2;
-    int j = 0;
+    unsigned int j = 0;
     for (it2 = bodyPredicates.begin(); it2 != bodyPredicates.end(); it2++) {
         if (j > 0) {
             cout << ",";
@@ -32,7 +32,7 @@ void Rule::toString() {
         cout << (*it2)->GetName() << "(";
         
         vector <Parameter*>::iterator it3;
-        int k = 0;
+        unsigned int k = 0;
         for (it3 = (*it2)->parameters.begin(); it3 != (*it2)->parameters.end(); it3++) {
             (*it3)->toString();
             k++;

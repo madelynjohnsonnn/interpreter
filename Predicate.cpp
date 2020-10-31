@@ -19,7 +19,7 @@ void Predicate::toString() {
     cout << "  " << name << "(";
     
     vector <Parameter*>::iterator it;
-    int i = 0;
+    unsigned int i = 0;
     for (it = parameters.begin(); it != parameters.end(); it++) {
         (*it)->toString();
         i++;

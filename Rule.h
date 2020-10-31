@@ -29,7 +29,6 @@ public:
     }
     
     void toString();
-    //vector <Parameter*> parameters;
 private:
     Predicate* headPredicate;
     vector <Predicate*> bodyPredicates;

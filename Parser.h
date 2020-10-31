@@ -26,10 +26,10 @@ public:
     Parser(vector <Token*> t);
     void Match(TokenType type);
     void Parse();
+    DatalogProgram* Parse1();
     void ParseDatalogProgram();
     void ParseSchemeList();
     void ParseFactList();
-    //void ParseRuleList(Rule* &r);
     void ParseRuleList();
     void ParseQueryList();
     void ParseScheme();
@@ -43,10 +43,7 @@ public:
     Parameter* ParseParameter();
     void ParseEOF();
     void Domain(string);
-    DatalogProgram* GetDatalog() {
-        return datalog;
-    }
-    
+    DatalogProgram* GetDatalog() { return datalog; }
     Predicate* ParseBodyPredicate();
     Parameter* ParseExpression();
     string ParseOperator();
@@ -56,7 +53,7 @@ public:
     
 private:
     vector <Token*> tokens;
-    int index;
+    unsigned int index;
     set <string> domain;
     //vector <Predicate*> predicates;
     DatalogProgram* datalog;

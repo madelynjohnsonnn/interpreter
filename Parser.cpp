@@ -27,8 +27,20 @@ void Parser::Parse() {
     }
     catch (Token* error) {
         cout << "Failure!" << endl;
-        cout << "\t" << error->toString() << endl;
+        cout << "  " << error->toString() << endl;
     }
+}
+
+DatalogProgram* Parser::Parse1() {
+    try {
+        ParseDatalogProgram();
+        return datalog;
+    }
+    catch (Token* error) {
+        cout << "Failure!" << endl;
+        cout << "  " << error->toString() << endl;
+    }
+    return NULL;
 }
 
 void Parser::Match(TokenType type) {
@@ -131,21 +143,10 @@ Rule* Parser::ParseRule() {
 void Parser::ParseRuleList() {
     //rule ruleList | lambda
     if (tokens.at(index)->GetType() == ID) {
-        //Rule* r = new Rule();
         ParseRule();
         ParseRuleList();
     }
 }
-
-/*
- void Parser::ParseRuleList(Rule* &r) {
-    //rule ruleList | lambda
-    if (tokens.at(index)->GetType() == ID) {
-        Rule* r = ParseRule();
-        ParseRuleList(r);
-    }
-}
-*/
 
 void Parser::ParseQuery() {
     //predicate Q_MARK
@@ -260,7 +261,6 @@ void Parser::ParseEOF() {
 void Parser::Domain(string s) {
     domain.insert(s);
 }
-
 
 
 //RULE STUFF

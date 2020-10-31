@@ -15,10 +15,11 @@
 #include "Parser.h"
 #include "TestParser.h"
 #include "DatalogProgram.h"
+#include "Interpreter.h"
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    ifstream in("/Users/maddie/CODING/lab2/lab2/project2-exampleIO/in62.txt");
+    ifstream in("/Users/maddie/CODING/lab2/lab2/Lab2PassOffCases/2-100/input2.txt");
  
 //    ifstream in(argv[1]);
     stringstream buffer;
@@ -29,12 +30,15 @@ int main(int argc, const char * argv[]) {
     //lexer->PrintTokens();
     
     Parser * parser = new Parser(lexer->GetTokens());
-    parser->Parse();
     
+    DatalogProgram* datalog = parser->Parse1();
+    Interpreter* interpreter = new Interpreter(datalog);
+    interpreter->Run();
     
     delete lexer;
     delete parser;
-    //delete datalog;
+    delete datalog;
+    delete interpreter;
     
     
 //    TestParser* tp = new TestParser();
