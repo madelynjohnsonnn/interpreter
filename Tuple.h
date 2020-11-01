@@ -13,19 +13,21 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include "Parameter.h"
 using namespace std;
 
 class Tuple {
 public:
-    Tuple(string n);
-    void AddToTuple(string s);
+//    Tuple(string n);
+    Tuple();
+    void AddToTuple(Parameter* p);
     void toString();
 private:
     bool operator< (const Tuple & other) const {
         return (this->values < other.values);
     }
-    vector <string> values;
-    string name;
+    vector <Parameter*> values;
+//    string name;
 };
 
 #endif /* Tuple_h */

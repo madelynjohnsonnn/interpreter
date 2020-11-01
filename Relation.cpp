@@ -8,7 +8,7 @@
 
 #include "Relation.h"
 
-Relation::Relation(string name, Header* header) {
+Relation::Relation(string name, Header header) {
     this->name = name;
     this->header = header;
     //always start with empty set of tuples
@@ -20,7 +20,7 @@ void Relation::AddTuple(Tuple* t) {
 
 void Relation::toString() {
     cout << name << endl;
-    header->toString();
+    header.toString();
     
     set <Tuple*>::iterator it;
     for (it = tuples.begin(); it != tuples.end(); it++) {

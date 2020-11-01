@@ -38,6 +38,10 @@ public:
         right->toString();
         cout << ")";
     }
+    string GetName() {
+        //TODO FIX THIS TO BE ENTIRE EXPRESSION
+        return op;
+    }
 private:
     Parameter* left;
     Parameter* right;

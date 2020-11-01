@@ -18,7 +18,7 @@ using namespace std;
 
 class Relation {
 public:
-    Relation(string name, Header* header);
+    Relation(string name, Header header);
     void AddTuple(Tuple* t);
     void toString();
     void select(int index, string value);
@@ -28,7 +28,7 @@ public:
 private:
     set <Tuple*> tuples; //coming from facts
     string name;
-    Header* header;
+    Header header;
 };
 
 #endif /* Relation_h */

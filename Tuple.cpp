@@ -8,16 +8,18 @@
 
 #include "Tuple.h"
 
-Tuple::Tuple(string n) {
-    name = n;
-}
+//Tuple::Tuple(string n) {
+//    name = n;
+//}
 
-void Tuple::AddToTuple(string s) {
-    values.push_back(s);
+Tuple::Tuple() {}
+
+void Tuple::AddToTuple(Parameter* p) {
+    values.push_back(p);
 }
 
 void Tuple::toString() {
-    vector<string>::iterator it;
+    vector<Parameter*>::iterator it;
     for (it = values.begin(); it != values.end(); it++) {
         cout << (*it) << " ";
     }

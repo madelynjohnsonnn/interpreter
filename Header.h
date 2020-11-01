@@ -18,11 +18,12 @@ using namespace std;
 
 class Header {
 public:
-    Header();
+//    Header();
     void toString();
     void AddAttribute(Parameter* a);
-private:
     vector <Parameter*> attributes;
+private:
+    
 };
 
 #endif /* Header_h */

@@ -19,10 +19,12 @@
 class Interpreter {
 public:
     Interpreter(DatalogProgram* dp);
+//    ~Interpreter();
     void Run();
 private:
     DatalogProgram* datalog;
     Database* database;
+    Header header;
 };
 
 #endif /* Interpreter_h */

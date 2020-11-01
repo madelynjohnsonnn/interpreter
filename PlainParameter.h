@@ -22,6 +22,9 @@ public:
     virtual void toString() {
         cout << value;
     }
+    string GetName() {
+        return value;
+    }
 //    virtual void SetLeft(string l) {}
 //    virtual void SetRight(string r) {}
 //    virtual void SetOp(string o) {}

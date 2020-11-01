@@ -20,11 +20,14 @@ using namespace std;
 //DOESN'T KNOW DATALOGPROGRAM CLASSES EXIST, ONLY INTERPRETER
 class Database {
 public:
-    Database();
-    void addRelation(string name, Relation relation) {
-        relations.insert(make_pair(name, relation));
+    Database() {}
+    void addRelation(string name, Relation* relation) {
+//        typedef pair<string, relation*> pair;
+//        relations.insert(pair(name, relation));
+        
+        relations.insert(pair<string, Relation*>(name, relation));
     }
-    map<string, Relation> relations;
+    map<string, Relation*> relations;
 private:
     
 };

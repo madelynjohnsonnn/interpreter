@@ -16,5 +16,5 @@ void Header::toString() {
 }
 
 void Header::AddAttribute(Parameter* a) {
-    attributes.push_back(a);
+    attributes.push_back(a); //TODO ERROR BEING CAUSED HERE
 }
