@@ -17,10 +17,13 @@
 class Parameter {
 public:
     virtual void toString() {}
-    bool isConstant(TokenType type);
 //    virtual void SetLeft(string l) = 0;
 //    virtual void SetRight(string r) = 0;
 //    virtual void SetOp(string o) = 0;
+    virtual bool isConstant() = 0;
+    virtual string GetName() = 0;
+    virtual void SetNameAndType(string s, TokenType t) = 0; //TODO is this used anywhere??
+    virtual string toString2() = 0;
 private:
     
 };

@@ -29,3 +29,20 @@ void Predicate::toString() {
     }
     cout << ")";
 }
+
+string Predicate::toString2() {
+    string returnVal;
+    returnVal += name + "(";
+    
+    vector <Parameter*>::iterator it;
+    unsigned int i = 0;
+    for (it = parameters.begin(); it != parameters.end(); it++) {
+        (*it)->toString();
+        i++;
+        if (i < parameters.size()) {
+            returnVal += ",";
+        }
+    }
+    returnVal += ")";
+    return returnVal;
+}

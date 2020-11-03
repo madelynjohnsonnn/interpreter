@@ -20,6 +20,7 @@ class Predicate {
 public:
     Predicate();
     void toString();
+    string toString2();
     void SetName(string n) {
         name = n;
     }

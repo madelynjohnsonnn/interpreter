@@ -16,20 +16,45 @@ using namespace std;
 
 class PlainParameter : public Parameter {
 public:
-    PlainParameter(string s) : Parameter() {
+    PlainParameter(string s, TokenType t) : Parameter() {
         value = s;
+        type = t;
+    }
+    PlainParameter() : Parameter() {}
+    virtual void SetNameAndType(string s, TokenType t) {
+        value = s;
+        type = t;
     }
     virtual void toString() {
         cout << value;
     }
-    string GetName() {
+    virtual string toString2() {
         return value;
+    }
+    virtual string GetName() {
+        return value;
+    }
+//    TokenType GetType() {
+//        return type;
+//    }
+    bool isConstant() { //STRING token, not ID
+        if (type == STRING) {
+            return true;
+        }
+        else if (type == ID) {
+            return false;
+        }
+        else {
+            cout << "not a string or id" << endl;
+            return true;
+        }
     }
 //    virtual void SetLeft(string l) {}
 //    virtual void SetRight(string r) {}
 //    virtual void SetOp(string o) {}
 private:
     string value;
+    TokenType type;
 };
 
 #endif /* PlainParameter_h */

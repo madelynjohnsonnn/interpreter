@@ -7,3 +7,10 @@
 //
 
 #include "Database.h"
+
+void Database::toString() {
+    map<string, Relation*>::iterator it;
+    for (it = relations.begin(); it!= relations.end(); it++) {
+        //cout << (*it).second->toString();
+    }
+}

@@ -18,47 +18,94 @@ Interpreter::Interpreter(DatalogProgram* dp){
 //}
 
 void Interpreter::Run() {
-    //make relation for each scheme predicate. take each predicate from scheme vector and look at it's name/header, make a relation with name and header (empty tuples) put into database map <string,relation>
-    //for each fact in datalog vector, look at name and look up in database what relation corresponds to the fact (what table to put row in) and insert tuple into relation
-    
     //SCHEME
-    vector<Predicate*>::iterator it;
-    for (it = datalog->schemes.begin(); it != datalog->schemes.end(); it++) {
-        vector<Parameter*>::iterator it2;
-        for (it2 = (*it)->parameters.begin(); it2 != (*it)->parameters.end(); it2++) {
+    for (vector<Predicate*>::iterator it = datalog->schemes.begin(); it != datalog->schemes.end(); it++) {
+        for (vector<Parameter*>::iterator it2 = (*it)->parameters.begin(); it2 != (*it)->parameters.end(); it2++) {
             header.AddAttribute((*it2));
         }
-        Relation* relation = new Relation(Relation((*it)->name, header));
-        database->addRelation((*it)->name, relation);
+        Relation* r = new Relation(Relation((*it)->name, header));
+        database->addRelation((*it)->name, r);
         
         //FACTS
-        vector<Predicate*>::iterator it3;
-        for (it3 = datalog->facts.begin(); it3 != datalog->facts.end(); it3++) {
-            
-            /*
-            //DOMAINS
+        for (vector<Predicate*>::iterator it3 = datalog->facts.begin(); it3 != datalog->facts.end(); it3++) {
             Tuple* tuple = new Tuple();
-            set<string>::iterator it4;
-            for (it4 = datalog->domains.begin(); it4 != datalog->domains.end(); it4++) {
-                tuple->AddToTuple((*it4));
-            }
-            */
-            
-            Tuple* tuple = new Tuple();
-            vector<Parameter*>::iterator it6;
-            for (it6 = (*it3)->parameters.begin(); it6 != (*it3)->parameters.end(); it6++) {
+            for (vector<Parameter*>::iterator it6 = (*it3)->parameters.begin(); it6 != (*it3)->parameters.end(); it6++) {
                 tuple->AddToTuple((*it6));
             }
             
-            map<string, Relation*>::iterator it5;
-            for (it5 = database->relations.begin(); it5 != database->relations.end(); it5++) { //TODO ERROR
+            for (map<string, Relation*>::iterator it5 = database->relations.begin(); it5 != database->relations.end(); it5++) {
                 if ((*it5).first == (*it3)->GetName()) {
-                    relation->AddTuple(tuple);
+                    r->AddTuple(tuple);
                 }
             }
         }
-//        Relation* relation1 = new Relation(Relation((*it)->name, header));
-//        database->addRelation((*it)->name, relation1);
+    }
+    EvaluateQueries();
+}
+
+void Interpreter::EvaluateQueries() {
+    for (vector<Predicate*>::iterator it2 = datalog->queries.begin(); it2 != datalog->queries.end(); it2++) {
+        Relation r = EvaluatePredicate((*it2));
+        (*it2)->toString2();
+        string out = r.toString(); //PRINT OUT RESULTS FOR LAB3
+        cout << out;
+    }
+}
+
+Relation Interpreter::EvaluatePredicate(Predicate* p) {
+//    select for each constant in the query ‘q’
+//    select for each pair of matching variables in ‘q’
+//    project using the positions of the variables in ‘q’
+//    rename to match the names of variables in ‘q’
+//    print the resulting relation
+    Relation rel = *(database->relations[p->name]);
+    map<int,string> variableMap;
+    int i = 0;
+    int j = 0;
+    
+    //SELECT
+    for (vector <Parameter*>::iterator it = p->parameters.begin(); it != p->parameters.end(); it++) {
+        if ((*it)->isConstant() == true) { //STRING
+            rel = *(rel.select1(&rel, i, (*it)->GetName()));
+        }
+        else { //is a variable
+            bool haveSeen = false;
+            for (map<int,string>::iterator it3 = variableMap.begin(); it3 != variableMap.end(); it3++) {
+                if ((it3)->second == (*it)->GetName()) {
+                    haveSeen = true;
+                    j = (*it3).first;
+                    break;
+                }
+            }
+            
+            if (!haveSeen) {
+                variableMap.insert(pair<int, string>(i, (*it)->GetName()));
+            }
+            else {
+                rel = *(rel.select2(&rel, i, j));
+            }
+        }
+        i++;
     }
     
+    //PROJECT AND RENAME
+    vector<int> pos;
+    vector<string> newHeaderVals;
+    for (map<int, string>::iterator it = variableMap.begin(); it != variableMap.end(); it++) {
+        pos.push_back((*it).first);
+        newHeaderVals.push_back((*it).second);
+    }
+    rel = *(rel.project(&rel, pos));
+    rel = *(rel.rename(&rel, newHeaderVals));
+    
+    return rel;
+}
+
+Relation* Interpreter::StoreRelation(string n, Header h) {
+    storedRelation = new Relation(n,h);
+    return storedRelation;
+}
+
+Relation* Interpreter::GetRelation() {
+    return storedRelation;
 }

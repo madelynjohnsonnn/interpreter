@@ -10,6 +10,7 @@
 #define Database_h
 
 #include <stdio.h>
+#include <iostream>
 #include <map>
 #include <string>
 #include <list>
@@ -27,6 +28,7 @@ public:
         
         relations.insert(pair<string, Relation*>(name, relation));
     }
+    void toString();
     map<string, Relation*> relations;
 private:
     

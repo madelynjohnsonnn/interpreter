@@ -84,7 +84,7 @@ void Parser::ParseScheme() {
     p->SetName(tokens.at(index - 1)->GetString());
     Match(LEFT_PAREN);
     Match(ID);
-    Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+    Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString(),ID);
     p->parameters.push_back(par);
     ParseIdList(p);
     Match(RIGHT_PAREN);
@@ -109,7 +109,7 @@ Predicate* Parser::ParseFact() {
         Domain(tokens.at(index)->GetString());
     }
     Match(STRING);
-    Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+    Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString(),STRING);
     p->parameters.push_back(par);
     ParseStringList(p);
     Match(RIGHT_PAREN);
@@ -171,7 +171,7 @@ Predicate* Parser::ParseHeadPredicate() {
     p->SetName(tokens.at(index - 1)->GetString());
     Match(LEFT_PAREN);
     Match(ID);
-    Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+    Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString(),ID);
     p->parameters.push_back(par);
     ParseIdList(p);
     Match(RIGHT_PAREN);
@@ -197,12 +197,12 @@ Parameter* Parser::ParseParameter() {
     if (tokens.size() >= index) {
         if (tokens.at(index)->GetType() == STRING) {
             Match(STRING);
-            Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+            Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString(),STRING);
             return par;
         }
         else if (tokens.at(index)->GetType() == ID) {
             Match(ID);
-            Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+            Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString(),ID);
             return par;
         }
         else if (tokens.at(index)->GetType() == LEFT_PAREN) {
@@ -234,7 +234,7 @@ void Parser::ParseStringList(Predicate* &p) {
             Domain(tokens.at(index)->GetString());
         }
         Match(STRING);
-        Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+        Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString(),STRING);
         p->parameters.push_back(par);
         
         ParseStringList(p);
@@ -247,7 +247,7 @@ void Parser::ParseIdList(Predicate* &p) {
         Match(COMMA);
         Match(ID);
         
-        Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString());
+        Parameter* par = new PlainParameter(tokens.at(index - 1)->GetString(),ID);
         p->parameters.push_back(par);
         
         ParseIdList(p);

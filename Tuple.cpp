@@ -18,9 +18,11 @@ void Tuple::AddToTuple(Parameter* p) {
     values.push_back(p);
 }
 
-void Tuple::toString() {
+string Tuple::toString() {
+    string returnVal;
     vector<Parameter*>::iterator it;
     for (it = values.begin(); it != values.end(); it++) {
-        cout << (*it) << " ";
+        returnVal += (*it)->toString2() + " ";
     }
+    return returnVal;
 }

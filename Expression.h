@@ -38,8 +38,15 @@ public:
         right->toString();
         cout << ")";
     }
-    string GetName() {
-        //TODO FIX THIS TO BE ENTIRE EXPRESSION
+    virtual string GetName() {
+        return "There should be no expressions past lab2";
+    }
+    bool isConstant() {
+        cout << "There should be no expressions past lab2" << endl;
+        return true;
+    }
+    virtual void SetNameAndType(string s, TokenType t) {}
+    virtual string toString2()  {
         return op;
     }
 private:

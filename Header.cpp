@@ -8,11 +8,19 @@
 
 #include "Header.h"
 
-void Header::toString() {
+string Header::toString() {
+    string returnVal;
     vector<Parameter*>::iterator it;
+    unsigned int i = 0;
     for (it = attributes.begin(); it != attributes.end(); it++) {
-        cout << *it;
+        cout << (*it)->toString2();
+//        returnVal += (*it)->toString2();
+        i++;
+        if (i < attributes.size()) {
+            returnVal += ",";
+        }
     }
+    return returnVal;
 }
 
 void Header::AddAttribute(Parameter* a) {

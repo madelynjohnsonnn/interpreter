@@ -21,12 +21,13 @@ public:
 //    Tuple(string n);
     Tuple();
     void AddToTuple(Parameter* p);
-    void toString();
+    string toString();
+    
+    vector <Parameter*> values;
 private:
     bool operator< (const Tuple & other) const {
         return (this->values < other.values);
     }
-    vector <Parameter*> values;
 //    string name;
 };
 

@@ -19,7 +19,7 @@ using namespace std;
 class Header {
 public:
 //    Header();
-    void toString();
+    string toString();
     void AddAttribute(Parameter* a);
     vector <Parameter*> attributes;
 private:
