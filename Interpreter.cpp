@@ -46,8 +46,37 @@ void Interpreter::Run() {
 void Interpreter::EvaluateQueries() {
     for (vector<Predicate*>::iterator it2 = datalog->queries.begin(); it2 != datalog->queries.end(); it2++) {
         Relation r = EvaluatePredicate((*it2));
-        (*it2)->toString2();
-        string out = r.toString(); //PRINT OUT RESULTS FOR LAB3
+        
+//        Tuple* t1 = new Tuple();
+//        Parameter* p1 = new PlainParameter("a", STRING);
+//        Parameter* p2 = new PlainParameter("b", STRING);
+//        t1->AddToTuple(p1);
+//        t1->AddToTuple(p2);
+//
+//        Tuple* t2 = new Tuple();
+//        Parameter* p3 = new PlainParameter("c", STRING);
+//        Parameter* p4 = new PlainParameter("d", STRING);
+//        t2->AddToTuple(p3);
+//        t2->AddToTuple(p4);
+//
+//        if ((*t2) < (*t1)) {
+//            cout << "hi";
+//        }
+        
+        //PRINT OUT RESULTS FOR LAB3
+        string out = (*it2)->toString2() + " ";
+        int size = 0;
+        for (set<Tuple*>::iterator it = r.tuples.begin(); it != r.tuples.end(); it++) {
+            size++;
+        }
+        if (size == 0) {
+            out += "No\n";
+        }
+        else {
+            out += "Yes(" + to_string(size) + ")\n";
+        }
+        
+        out += r.toString();
         cout << out;
     }
 }

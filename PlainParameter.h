@@ -49,6 +49,9 @@ public:
             return true;
         }
     }
+    bool operator< (const PlainParameter & other) const {
+        return (this->value < other.value);
+    }
 //    virtual void SetLeft(string l) {}
 //    virtual void SetRight(string r) {}
 //    virtual void SetOp(string o) {}

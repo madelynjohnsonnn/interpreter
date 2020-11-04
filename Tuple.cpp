@@ -18,11 +18,19 @@ void Tuple::AddToTuple(Parameter* p) {
     values.push_back(p);
 }
 
-string Tuple::toString() {
-    string returnVal;
-    vector<Parameter*>::iterator it;
-    for (it = values.begin(); it != values.end(); it++) {
-        returnVal += (*it)->toString2() + " ";
+string Tuple::toString(vector<Parameter*> headAttributes) {
+    string returnVal = "";
+    int i = 0;
+    for (vector<Parameter*>::iterator it = values.begin(); it != values.end(); it++) {
+        returnVal += headAttributes.at(i)->toString2() + "=";
+        
+        if (it == values.end() - 1) {
+            returnVal += (*it)->toString2() + "\n";
+        }
+        else {
+            returnVal += (*it)->toString2() + ", ";
+        }
+        i++;
     }
     return returnVal;
 }

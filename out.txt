@@ -1,1 +1,13 @@
-X't'XYXXYabcde(,)'g' 'h' 't' 't' 
+SK(A,'c')? Yes(3)
+  A='a'
+  A='b'
+  A='b'
+SK('b','c')? Yes(2)
+    SK(X,X)? Yes(1)
+  X='b'
+SK(A,B)? Yes(4)
+  A='a', B='c'
+  A='b', B='c'
+  A='b', B='b'
+  A='b', B='c'
+SK('c','c')? No

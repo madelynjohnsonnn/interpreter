@@ -37,12 +37,13 @@ string Predicate::toString2() {
     vector <Parameter*>::iterator it;
     unsigned int i = 0;
     for (it = parameters.begin(); it != parameters.end(); it++) {
-        (*it)->toString();
+        string str = (*it)->toString2();
+        returnVal += str;
         i++;
         if (i < parameters.size()) {
             returnVal += ",";
         }
     }
-    returnVal += ")";
+    returnVal += ")?";
     return returnVal;
 }

@@ -19,7 +19,7 @@
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    ifstream in("/Users/maddie/CODING/lab2/lab2/project3-exampleIO/in777.txt");
+    ifstream in("/Users/maddie/CODING/lab2/lab2/project3-exampleIO/in30.txt");
  
 //    ifstream in(argv[1]);
     stringstream buffer;

@@ -20,13 +20,13 @@ void Relation::AddTuple(Tuple* t) {
 
 string Relation::toString() {
     string returnVal;
-    returnVal += name + "(";
-    returnVal += header.toString();
-    returnVal += ")";
+//    returnVal += name + "(";
+//    returnVal += header.toString();
+//    returnVal += ")";
     
-    set <Tuple*>::iterator it;
-    for (it = tuples.begin(); it != tuples.end(); it++) {
-        returnVal += (*it)->toString();
+    for (set <Tuple*>::iterator it = tuples.begin(); it != tuples.end(); it++) {
+        returnVal += "  ";
+        returnVal += (*it)->toString(header.attributes);
     }
     return returnVal;
 }

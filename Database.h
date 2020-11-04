@@ -23,9 +23,6 @@ class Database {
 public:
     Database() {}
     void addRelation(string name, Relation* relation) {
-//        typedef pair<string, relation*> pair;
-//        relations.insert(pair(name, relation));
-        
         relations.insert(pair<string, Relation*>(name, relation));
     }
     void toString();

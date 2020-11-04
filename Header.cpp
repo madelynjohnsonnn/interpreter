@@ -10,11 +10,10 @@
 
 string Header::toString() {
     string returnVal;
-    vector<Parameter*>::iterator it;
     unsigned int i = 0;
-    for (it = attributes.begin(); it != attributes.end(); it++) {
-        cout << (*it)->toString2();
-//        returnVal += (*it)->toString2();
+    for (vector<Parameter*>::iterator it = attributes.begin(); it != attributes.end(); it++) {
+        string str = (*it)->toString2();
+        returnVal += str;
         i++;
         if (i < attributes.size()) {
             returnVal += ",";
@@ -24,5 +23,5 @@ string Header::toString() {
 }
 
 void Header::AddAttribute(Parameter* a) {
-    attributes.push_back(a); //TODO ERROR BEING CAUSED HERE
+    attributes.push_back(a);
 }

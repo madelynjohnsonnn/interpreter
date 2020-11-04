@@ -21,13 +21,27 @@ public:
 //    Tuple(string n);
     Tuple();
     void AddToTuple(Parameter* p);
-    string toString();
-    
-    vector <Parameter*> values;
-private:
+    string toString(vector<Parameter*> header);
     bool operator< (const Tuple & other) const {
-        return (this->values < other.values);
+//        vector<Parameter> v1;
+//        vector<Parameter> v2;
+//        vector<Parameter*>::iterator it = this->values.begin();
+////        while (it != this->values.end()) {
+////
+////            it++;
+////        }
+//        for (vector<Parameter*>::iterator it = this->values.begin(); it != this->values.end(); it++) {
+//
+//        }
+//        for (vector<Parameter*>::iterator it = other.values->begin(); it != other.values->end(); it++) {
+//
+//        }
+        return (values < other.values);
     }
+    
+    vector<Parameter*> values;
+private:
+    
 //    string name;
 };
 
