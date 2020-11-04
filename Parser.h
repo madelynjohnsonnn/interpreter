@@ -16,8 +16,7 @@
 #include "Parser.h"
 #include "Predicate.h"
 #include "Rule.h"
-#include "PlainParameter.h"
-#include "Expression.h"
+#include "Parameter.h"
 #include "DatalogProgram.h"
 using namespace std;
 

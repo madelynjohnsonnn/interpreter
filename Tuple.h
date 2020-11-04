@@ -21,22 +21,36 @@ public:
 //    Tuple(string n);
     Tuple();
     void AddToTuple(Parameter* p);
-    string toString(vector<Parameter*> header);
+    
+    string toString(const vector<Parameter*> header) {
+        string returnVal = "";
+        int i = 0;
+        for (vector<Parameter*>::iterator it = values.begin(); it != values.end(); it++) {
+            returnVal += header.at(i)->toString2() + "=";
+            
+            if (it == values.end() - 1) {
+                returnVal += (*it)->toString2() + "\n";
+            }
+            else {
+                returnVal += (*it)->toString2() + ", ";
+            }
+            i++;
+        }
+        return returnVal;
+    }
+    
     bool operator< (const Tuple & other) const {
-//        vector<Parameter> v1;
-//        vector<Parameter> v2;
-//        vector<Parameter*>::iterator it = this->values.begin();
-////        while (it != this->values.end()) {
-////
-////            it++;
-////        }
-//        for (vector<Parameter*>::iterator it = this->values.begin(); it != this->values.end(); it++) {
-//
-//        }
-//        for (vector<Parameter*>::iterator it = other.values->begin(); it != other.values->end(); it++) {
-//
-//        }
-        return (values < other.values);
+        vector<Parameter> v1;
+        vector<Parameter> v2;
+        for (unsigned int i = 0; i < this->values.size(); i++) {
+            Parameter* p = this->values.at(i);
+            v1.push_back(*p);
+        }
+        for (unsigned int i = 0; i < other.values.size(); i++) {
+            v2.push_back(*(other.values.at(i)));
+        }
+        bool returnVal = v1 < v2;
+        return returnVal;
     }
     
     vector<Parameter*> values;

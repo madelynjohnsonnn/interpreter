@@ -15,7 +15,7 @@
 #include <string>
 #include "Tuple.h"
 #include "Header.h"
-#include "PlainParameter.h"
+#include "Parameter.h"
 using namespace std;
 
 class Relation {
@@ -24,7 +24,7 @@ public:
     Relation() {
         name = "";
     }
-    void AddTuple(Tuple* t);
+    void AddTuple(Tuple t);
 //    void SetHeader(Relation* oldRel, Relation* newRel);
 //    void SetName(Relation* oldRel, Relation* newRel);
     Header GetHeader(Relation* rel);
@@ -38,7 +38,7 @@ public:
     
     string name;
     Header header;
-    set <Tuple*> tuples; //coming from facts
+    set <Tuple> tuples; //coming from facts
 private:
     
 };

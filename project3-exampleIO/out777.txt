@@ -1,3 +1,0 @@
-abcde(X,'t',X,Y,X)? Yes(2)
-  X='t', Y='t'
-  X='g', Y='h'

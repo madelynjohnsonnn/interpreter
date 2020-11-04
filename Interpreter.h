@@ -14,7 +14,7 @@
 #include "DatalogProgram.h"
 #include "Database.h"
 #include "Relation.h"
-#include "PlainParameter.h"
+#include "Parameter.h"
 
 //MANAGES DATABASE, CONNECTS BETWEEN DATALOGPROGRAM AND DATABASE
 class Interpreter {
@@ -29,9 +29,9 @@ public:
 private:
     DatalogProgram* datalog;
     Database* database;
-    Header header;
-    Relation* storedRelation; //the relation that is passed into the Relation class methods. No tuples are in it, just the name and header values.
-    vector<string> variables;
+//    Relation* storedRelation; //the relation that is passed into the Relation class methods. No tuples are in it, just the name and header values.
+    
+    void TestSet();
 };
 
 #endif /* Interpreter_h */

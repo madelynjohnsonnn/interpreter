@@ -1,13 +1,16 @@
-SK(A,'c')? Yes(3)
-  A='a'
-  A='b'
-  A='b'
-SK('b','c')? Yes(2)
-    SK(X,X)? Yes(1)
-  X='b'
-SK(A,B)? Yes(4)
-  A='a', B='c'
-  A='b', B='c'
-  A='b', B='b'
-  A='b', B='c'
-SK('c','c')? No
+loves(A,X)? Yes(5)
+  A='bob', X='jane'
+  A='frankk', X='mary'
+  A='jane', X='frankk'
+  A='john', X='john'
+  A='mary', X='bob'
+loves(J,J)? Yes(1)
+  J='john'
+loves('frankk','mary')? Yes(1)
+loves('mary','frankk')? No
+hates(G,G)? Yes(1)
+  G='gollum'
+hates('jane',B)? Yes(1)
+  B='bob'
+hates(M,'frankk')? Yes(1)
+  M='mary'
