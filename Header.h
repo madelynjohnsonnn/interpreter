@@ -21,7 +21,7 @@ public:
 //    Header();
     string toString();
     void AddAttribute(Parameter* a);
-    vector <Parameter*> attributes;
+    vector<Parameter*> attributes;
 private:
     
 };

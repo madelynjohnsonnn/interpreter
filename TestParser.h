@@ -13,7 +13,7 @@
 
 class TestParser {
 public:
-    void TestSchemeList();
+    void TestJoin();
 };
 
 

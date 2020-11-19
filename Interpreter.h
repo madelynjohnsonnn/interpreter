@@ -20,18 +20,15 @@
 class Interpreter {
 public:
     Interpreter(DatalogProgram* dp);
-//    ~Interpreter();
+    //~Interpreter();
     void Run();
     Relation EvaluatePredicate(Predicate* p);
     void EvaluateQueries();
-    Relation* StoreRelation(string n, Header h);
-    Relation* GetRelation();
+    void EvaluateRules();
 private:
     DatalogProgram* datalog;
     Database* database;
-//    Relation* storedRelation; //the relation that is passed into the Relation class methods. No tuples are in it, just the name and header values.
-    
-    void TestSet();
+    //void TestSet();
 };
 
 #endif /* Interpreter_h */

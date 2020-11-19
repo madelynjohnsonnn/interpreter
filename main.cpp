@@ -19,29 +19,29 @@
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-//    ifstream in("/Users/maddie/CODING/lab2/lab2/Lab3PassOffCases/3-100/input9.txt");
- 
-    ifstream in(argv[1]);
-    stringstream buffer;
-    buffer << in.rdbuf();
+//    ifstream in("/Users/maddie/Downloads/project4-exampleIO/in40.txt");
+//
+////    ifstream in(argv[1]);
+//    stringstream buffer;
+//    buffer << in.rdbuf();
+//
+//    Lexer* lexer = new Lexer();
+//    lexer->run(buffer.str());
+//    //lexer->PrintTokens();
+//
+//    Parser * parser = new Parser(lexer->GetTokens());
+//
+//    DatalogProgram* datalog = parser->Parse1();
+//    Interpreter* interpreter = new Interpreter(datalog);
+//    interpreter->Run();
+//
+//    delete lexer;
+//    delete parser;
+//    delete datalog;
+//    delete interpreter;
     
-    Lexer* lexer = new Lexer();
-    lexer->run(buffer.str());
-    //lexer->PrintTokens();
     
-    Parser * parser = new Parser(lexer->GetTokens());
-    
-    DatalogProgram* datalog = parser->Parse1();
-    Interpreter* interpreter = new Interpreter(datalog);
-    interpreter->Run();
-    
-    delete lexer;
-    delete parser;
-    delete datalog;
-    delete interpreter;
-    
-    
-//    TestParser* tp = new TestParser();
-//    tp->TestSchemeList();
+    TestParser* tp = new TestParser();
+    tp->TestJoin();
     
 }

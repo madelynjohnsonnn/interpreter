@@ -43,8 +43,9 @@ void Interpreter::Run() {
             }
         }
     }
-    
+    //EvaluateRules();
     EvaluateQueries();
+    EvaluateRules();
 }
 
 void Interpreter::EvaluateQueries() {
@@ -53,7 +54,9 @@ void Interpreter::EvaluateQueries() {
 //        TestSet();
         
         //PRINT OUT RESULTS FOR LAB3
-        string out = (*it2)->toString2() + " ";
+        
+        string out = "Query Evaluation\n";
+        out = (*it2)->toString2() + " ";
         int size = 0;
         for (set<Tuple>::iterator it = r.tuples.begin(); it != r.tuples.end(); it++) {
             size++;
@@ -129,55 +132,54 @@ Relation Interpreter::EvaluatePredicate(Predicate* p) {
     return rel;
 }
 
-//Relation* Interpreter::StoreRelation(string n, Header h) {
-//    storedRelation = new Relation(n,h);
-//    return storedRelation;
-//}
-//
-//Relation* Interpreter::GetRelation() {
-//    return storedRelation;
-//}
-
-void Interpreter::TestSet() {
+void Interpreter::EvaluateRules() {
     
-    Parameter* p1 = new Parameter("a", STRING);
-    Parameter* p2 = new Parameter("b", STRING);
-    Parameter* p3 = new Parameter("c", STRING);
-    Parameter* p4 = new Parameter("d", STRING);
-    Parameter* p5 = new Parameter("e", STRING);
-    Parameter* p6 = new Parameter("f", STRING);
-    Parameter* p7 = new Parameter("g", STRING);
-    Parameter* p8 = new Parameter("h", STRING);
-
-
-    Tuple t1 = Tuple();
-    t1.AddToTuple(p1);
-    t1.AddToTuple(p2);
-
-    Tuple t2 = Tuple();
-    t2.AddToTuple(p3);
-    t2.AddToTuple(p4);
-
-    Tuple t3 = Tuple();
-    t3.AddToTuple(p5);
-    t3.AddToTuple(p6);
-
-    Tuple t4 =  Tuple();
-    t4.AddToTuple(p5);
-    t4.AddToTuple(p6);
+//    for (vector<Rule*>::iterator it2 = datalog->rules.begin(); it2 != datalog->rules.end(); it2++) {
+//        Relation* r = r->NaturalJoin(*it2);
+//    }
     
-    Tuple t5 =  Tuple();
-    t5.AddToTuple(p8);
-    t5.AddToTuple(p7);
-    
-    set<Tuple> s;
-    s.insert(t5);
-    s.insert(t3);
-    s.insert(t4);
-    s.insert(t2);
-    s.insert(t1);
-
-    if ((t2) < (t1)) {
-        cout << "hi";
-    }
 }
+
+//void Interpreter::TestSet() {
+//
+//    Parameter* p1 = new Parameter("a", STRING);
+//    Parameter* p2 = new Parameter("b", STRING);
+//    Parameter* p3 = new Parameter("c", STRING);
+//    Parameter* p4 = new Parameter("d", STRING);
+//    Parameter* p5 = new Parameter("e", STRING);
+//    Parameter* p6 = new Parameter("f", STRING);
+//    Parameter* p7 = new Parameter("g", STRING);
+//    Parameter* p8 = new Parameter("h", STRING);
+//
+//
+//    Tuple t1 = Tuple();
+//    t1.AddToTuple(p1);
+//    t1.AddToTuple(p2);
+//
+//    Tuple t2 = Tuple();
+//    t2.AddToTuple(p3);
+//    t2.AddToTuple(p4);
+//
+//    Tuple t3 = Tuple();
+//    t3.AddToTuple(p5);
+//    t3.AddToTuple(p6);
+//
+//    Tuple t4 =  Tuple();
+//    t4.AddToTuple(p5);
+//    t4.AddToTuple(p6);
+//
+//    Tuple t5 =  Tuple();
+//    t5.AddToTuple(p8);
+//    t5.AddToTuple(p7);
+//
+//    set<Tuple> s;
+//    s.insert(t5);
+//    s.insert(t3);
+//    s.insert(t4);
+//    s.insert(t2);
+//    s.insert(t1);
+//
+//    if ((t2) < (t1)) {
+//        cout << "hi";
+//    }
+//}

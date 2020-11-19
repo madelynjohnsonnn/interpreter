@@ -14,3 +14,13 @@ void Database::toString() {
         //cout << (*it).second->toString();
     }
 }
+
+//int Database::GetSize() {
+//    unsigned int size = 0;
+//    
+//    for (map<string, Relation*>::iterator it = relations.begin(); it != relations.end(); it++) {
+//        size += (*it).second->GetSize();
+//    }
+//    
+//    return size;
+//}

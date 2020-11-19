@@ -27,6 +27,7 @@ public:
     }
     void toString();
     map<string, Relation*> relations;
+//    int GetSize();
 private:
     
 };

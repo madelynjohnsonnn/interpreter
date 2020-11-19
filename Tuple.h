@@ -53,10 +53,36 @@ public:
         return returnVal;
     }
     
-    vector<Parameter*> values;
-private:
+    bool operator== (const Tuple & other) const {
+        if (this->values.size() != other.values.size()) {
+            return false;
+        }
+        for (unsigned int i = 0; i < this->values.size(); i++) {
+            Parameter* p = this->values.at(i);
+            if (p->GetName() != other.values.at(i)->GetName()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    bool equals (const Tuple & other) const {
+        if (this->values.size() != other.values.size()) {
+            return false;
+        }
+        for (unsigned int i = 0; i < this->values.size(); i++) {
+            Parameter* p = this->values.at(i);
+            if (p->GetName() != other.values.at(i)->GetName()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    vector<Parameter*> GetValues() {
+        return values;
+    }
     
-//    string name;
+    
+    vector<Parameter*> values;
 };
 
 #endif /* Tuple_h */
