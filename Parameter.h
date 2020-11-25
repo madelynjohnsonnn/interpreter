@@ -25,8 +25,8 @@ public:
         value = s;
         type = t;
     }
-    void toString() {
-        cout << value;
+    string toString() {
+        return value;
     }
     string toString2() {
         return value;

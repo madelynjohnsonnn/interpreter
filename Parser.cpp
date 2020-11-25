@@ -18,6 +18,10 @@ Parser::Parser(vector <Token*> t) {
     datalog = new DatalogProgram(domain);
 }
 
+Parser::~Parser() {
+    delete datalog;
+}
+
 //TODO Datalog Parse();
 
 void Parser::Parse() {

@@ -18,6 +18,11 @@ void Relation::AddTuple(Tuple t) {
     tuples.insert(t);
 }
 
+bool Relation::AddTuple2(Tuple t) {
+    bool b = tuples.insert(t).second;
+    return b;
+}
+
 string Relation::toString() {
     string returnVal;
     
@@ -28,11 +33,6 @@ string Relation::toString() {
         returnVal += "  ";
         returnVal += (it)->toString(header.attributes);
     }
-    
-//        for (set<Tuple>::iterator it = tuples.begin(); it != tuples.end(); it++) {
-//            returnVal += "  ";
-//            returnVal += (it)->toString(header.attributes);
-//        }
     
     return returnVal;
 }
@@ -62,15 +62,15 @@ Relation* Relation::select2(Relation* rel, int index1, int index2) {
     return rel;
 }
 
-Relation* Relation::project(Relation* rel, vector<int> pos) {
+void Relation::project(vector<int> pos) {
     set<Tuple> newTuples;
     vector <Parameter*> newAttributes;
     
     for (vector<int>::iterator it = pos.begin(); it != pos.end(); it++) {
-        newAttributes.push_back(rel->header.attributes.at((*it)));
+        newAttributes.push_back(this->header.attributes.at((*it)));
     }
     
-    for (set<Tuple>::iterator it2 = rel->tuples.begin(); it2 != rel->tuples.end(); it2++) {
+    for (set<Tuple>::iterator it2 = this->tuples.begin(); it2 != this->tuples.end(); it2++) {
         Tuple tuple = Tuple();
         for (vector<int>::iterator it = pos.begin(); it != pos.end(); it++) {
             Parameter* p = (*it2).values.at(*it);
@@ -79,12 +79,11 @@ Relation* Relation::project(Relation* rel, vector<int> pos) {
         newTuples.insert(tuple);
     }
     
-    rel->header.attributes = newAttributes;
-    rel->tuples = newTuples;
-    return rel;
+    this->header.attributes = newAttributes;
+    this->tuples = newTuples;
 }
 
-Relation* Relation::rename(Relation* rel, vector<string> newHeader) {
+void Relation::renameHeader(vector<string> newHeader) {
     //just change header
     vector <Parameter*> newAttributes;
     
@@ -93,39 +92,43 @@ Relation* Relation::rename(Relation* rel, vector<string> newHeader) {
         newAttributes.push_back(p);
     }
     
-    rel->header.attributes = newAttributes;
-    return rel;
+    this->header.attributes = newAttributes;
 }
 
-void Relation::Unionize(Tuple t) {
-    //insert new tuples into relation
-    tuples.insert(t);
-    
-    //TODO
-    //if(mySet.insert(myTuple).second)
-    //set.insert returns a pair: the second part is a bool saying if the inserted element was new to the set
-    //If it already existed, do nothing more
-    //If it is a new tuple, print it out
+//Header Relation::renameHeader2(vector<string> newHeader) {
+//    Header head;
+////    vector <Parameter*> newAttributes;
+//
+//    for (vector<string>::iterator it2 = newHeader.begin(); it2 != newHeader.end(); it2++) {
+//        Parameter* p = new Parameter((*it2),ID);
+//        head.AddAttribute(p);
+//    }
+//    return head;
+//}
 
+void Relation::renameName(Relation r) {
+    this->name = r.name;
+}
+
+void Relation::Unionize(Relation r, Header headVals) {
+    //insert new tuples into relation
+    
+    for (set<Tuple>::iterator it = r.tuples.begin(); it != r.tuples.end(); it++) {
+        if (this->tuples.insert((*it)).second == true) { //if it's new
+            //DO NOTHING, PRINTING IN EVALUATERULES()
+        }
+    }
+    
 }
 
 Relation* Relation::NaturalJoin(Relation* r) {
+    tuplesAdded = false;
     Relation* joinedRelation = new Relation("result", CombineHeaders(this, r));
     
-//    vector<Tuple> matches;
-//    vector<Parameter*> commonHeaderNames;
-//    for (vector<Parameter*>::iterator it = this->header.attributes.begin(); it != this->header.attributes.end(); it++) {
-//        if (find(r->header.attributes.begin(), r->header.attributes.end(), (*it)) != r->header.attributes.end()) { //DOES CONTAIN
-//            commonHeaderNames.push_back((*it));
-//            break;
-//        }
-//    }
-    
-    int i = 0;
+    unsigned int i = 0;
     vector<int> pos1;
     bool addVal = false;
     for (vector<Parameter*>::iterator it = this->header.attributes.begin(); it != this->header.attributes.end(); it++) {
-//        if (find(r->header.attributes.begin(), r->header.attributes.end(), (*it)) != r->header.attributes.end()) { //DOES CONTAIN
         addVal = false;
         for (vector<Parameter*>::iterator it2 = r->header.attributes.begin(); it2 != r->header.attributes.end(); it2++) {
             if ((*it)->GetName() == (*it2)->GetName()) {
@@ -143,7 +146,6 @@ Relation* Relation::NaturalJoin(Relation* r) {
     vector<int> pos2;
     addVal = false;
     for (vector<Parameter*>::iterator it = r->header.attributes.begin(); it != r->header.attributes.end(); it++) {
-//        if (find(this->header.attributes.begin(), this->header.attributes.end(), (*it)) != this->header.attributes.end()) { //DOES CONTAIN
         addVal = false;
         for (vector<Parameter*>::iterator it2 = this->header.attributes.begin(); it2 != this->header.attributes.end(); it2++) {
             if ((*it)->GetName() == (*it2)->GetName()) {
@@ -164,9 +166,8 @@ Relation* Relation::NaturalJoin(Relation* r) {
     vector<Tuple> v2 = r->projectTuples(pos2);
     
     i = 0;
-    int j = 0;
-    int k = 0;
-    
+    unsigned int j = 0;
+    unsigned int k = 0;
     
     for (vector<Tuple>::iterator it = v1.begin(); it != v1.end(); it++) {
         j = 0;
@@ -178,20 +179,18 @@ Relation* Relation::NaturalJoin(Relation* r) {
                 
                 k = 0;
                 for (vector<Parameter*>::iterator it3 = t2.values.begin(); it3 != t2.values.end(); it3++) {
-                    //for (vector<int>::iterator it4 = pos2.begin(); it4 != pos2.end(); it4++) {
                     if (find(pos2.begin(), pos2.end(), k) == pos2.end()) { //DOES NOT CONTAIN
                         t1.AddToTuple((*it3));
                     }
                     k++;
                 }
-                
-                joinedRelation->AddTuple(t1);
+                bool b = joinedRelation->AddTuple2(t1);
+                tuplesAdded = b;
             }
             j++;
         }
         i++;
     }
-    
     
     return joinedRelation;
 }
@@ -200,10 +199,9 @@ Header Relation::CombineHeaders(Relation* r1, Relation* r2) {
     //adding in r1 attributes
     vector<Parameter*> combined = r1->header.attributes;
     
-    //r2 attributes
+    //r2 attributes that are unique from r1
     bool addVal = true;
     for (vector<Parameter*>::iterator it = r2->header.attributes.begin(); it != r2->header.attributes.end(); it++) {
-//        if (std::find(combined.begin(), combined.end(), (*it)) == combined.end()) { //DOES NOT CONTAIN
         addVal = true;
         for (vector<Parameter*>::iterator it2 = combined.begin(); it2 != combined.end(); it2++) {
             if ((*it)->GetName() == (*it2)->GetName()) {
@@ -218,12 +216,11 @@ Header Relation::CombineHeaders(Relation* r1, Relation* r2) {
     
     Header header;
     header.attributes = combined;
-    
     return header;
 }
 
 Tuple Relation::GetTupleAtIndex(int index) {
-    int i = 0;
+    unsigned int i = 0;
     for (set<Tuple>::iterator it = this->tuples.begin(); it != this->tuples.end(); it++) {
         if (i == index) {
             return (*it);
@@ -258,9 +255,3 @@ vector<Tuple> Relation::projectTuples(vector<int> pos) {
     
     return newTuples;
 }
-
-
-//bool Relation::IsJoinable(Tuple t1, Tuple t2) {
-//
-//    return true;
-//}

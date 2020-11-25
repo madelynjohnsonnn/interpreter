@@ -13,13 +13,12 @@ Interpreter::Interpreter(DatalogProgram* dp){
     datalog = dp;
 }
 
-//Interpreter::~Interpreter() {
-//    delete database;
-//}
+Interpreter::~Interpreter() {
+    delete database;
+}
 
 void Interpreter::Run() {
     //SCHEME
-    
     for (vector<Predicate*>::iterator it = datalog->schemes.begin(); it != datalog->schemes.end(); it++) {
         Header header = Header();
         for (vector<Parameter*>::iterator it2 = (*it)->parameters.begin(); it2 != (*it)->parameters.end(); it2++) {
@@ -30,34 +29,144 @@ void Interpreter::Run() {
     }
     
     //FACTS
-    for (vector<Predicate*>::iterator it3 = datalog->facts.begin(); it3 != datalog->facts.end(); it3++) {
+    for (vector<Predicate*>::iterator it = datalog->facts.begin(); it != datalog->facts.end(); it++) {
         Tuple tuple = Tuple();
-        for (vector<Parameter*>::iterator it6 = (*it3)->parameters.begin(); it6 != (*it3)->parameters.end(); it6++) {
-            tuple.AddToTuple((*it6));
+        for (vector<Parameter*>::iterator it2 = (*it)->parameters.begin(); it2 != (*it)->parameters.end(); it2++) {
+            tuple.AddToTuple((*it2));
         }
         
-        for (map<string, Relation*>::iterator it5 = database->relations.begin(); it5 != database->relations.end(); it5++) {
-            if ((*it5).first == (*it3)->GetName()) {
-                Relation* rel = database->relations[(*it3)->name];
+        for (map<string, Relation*>::iterator it3 = database->relations.begin(); it3 != database->relations.end(); it3++) {
+            if ((*it3).first == (*it)->GetName()) {
+                Relation* rel = database->relations[(*it)->name];
                 rel->AddTuple(tuple);
             }
         }
     }
-    //EvaluateRules();
-    EvaluateQueries();
-    EvaluateRules();
+    
+    //EVALUATING RULES
+    unsigned long startTupleNum = CountTuples();
+    unsigned long endTupleNum = startTupleNum;
+    bool flag = true;
+    unsigned int numPasses = 0;
+    string out = "Rule Evaluation\n";;
+    
+    do {
+        out += EvaluateRules();
+        numPasses++;
+        endTupleNum = CountTuples();
+        if (endTupleNum == startTupleNum) {
+            flag = false;
+        }
+        else {
+            startTupleNum = endTupleNum;
+        }
+    } while (flag == true);
+    
+    out += "\nSchemes populated after " + to_string(numPasses) + " passes through the Rules.\n\n";
+    
+    //EVALUATING QUERIES
+    out += EvaluateQueries();
+    
+    cout << out;
 }
 
-void Interpreter::EvaluateQueries() {
+unsigned long Interpreter::CountTuples() {
+    unsigned long returnVal = 0;
+    for (map<string, Relation*>::iterator it = database->relations.begin(); it != database->relations.end(); it++) {
+        returnVal += (*it).second->tuples.size();
+    }
+    return returnVal;
+}
+
+string Interpreter::EvaluateRules() {
+    string out = "";
+    Relation* finalRelation;
+    
+    //Evaluate the predicates on the right-hand side of the rule:
+    for (vector<Rule*>::iterator it = datalog->rules.begin(); it != datalog->rules.end(); it++) {
+        out += (*it)->toString();
+        
+        vector<Relation> ruleBodyPredicates;
+        for (vector<Predicate*>::iterator it2 = (*it)->bodyPredicates.begin(); it2 != (*it)->bodyPredicates.end(); it2++) {
+            Relation r = EvaluatePredicate((*it2));
+            ruleBodyPredicates.push_back(r);
+        }
+        
+        //for each new relation inside of vector<Predicate*> ruleBodyPredicates, join together to create finalRelation
+        finalRelation = &(ruleBodyPredicates.at(0));
+        
+        for (unsigned int i = 1; i < ruleBodyPredicates.size(); i++) {
+            finalRelation = finalRelation->NaturalJoin(&(ruleBodyPredicates.at(i)));
+        }
+        
+        //project the columns of head predicate on finalRelation to get finalRelation2
+        vector<int> pos;
+        unsigned int i = 0;
+        for (vector<Parameter*>::iterator it3 = (*it)->headPredicate->parameters.begin(); it3 != (*it)->headPredicate->parameters.end(); it3++) {
+            i = 0;
+            for (vector<Parameter*>::iterator it2 = finalRelation->header.attributes.begin(); it2 != finalRelation->header.attributes.end(); it2++) {
+                if ((*it2)->GetName() == (*it3)->GetName()) {
+                    pos.push_back(i);
+                }
+                i++;
+            }
+        }
+        finalRelation->project(pos);
+        
+        //headPred = the relation in the database that matches the head predicate
+        Relation ruleHeadPredicate = EvaluatePredicate((*it)->headPredicate);
+        
+        //rename each attribute in finalRelation2 to match headPred, creating finalRelation3
+        vector<string> ruleHeadPredicateHeaderVals;
+        for (vector<Parameter*>::iterator it3 = ruleHeadPredicate.header.attributes.begin(); it3 != ruleHeadPredicate.header.attributes.end(); it3++) {
+            ruleHeadPredicateHeaderVals.push_back((*it3)->GetName());
+        }
+        finalRelation->renameHeader(ruleHeadPredicateHeaderVals);
+        finalRelation->renameName(ruleHeadPredicate);
+        //finalRelation3 is now union compatible with headPred
+        
+        //union finalRelation with headPred
+        Header headVals;
+        for (vector<Predicate*>::iterator it2 = datalog->schemes.begin(); it2 != datalog->schemes.end(); it2++) {
+            if ((*it2)->GetName() == ruleHeadPredicate.name) {
+                headVals.attributes = ((*it2)->parameters);
+            }
+        }
+        
+//        Relation* temp = Copy(finalRelation);
+        
+        
+        
+        finalRelation->Unionize(ruleHeadPredicate, headVals);
+        
+        //update headPred in database with new relation
+        database->addRelation(ruleHeadPredicate.name, finalRelation);
+        
+    }
+    
+//    for (set<Tuple>::iterator it2 = finalRelation->tuples.begin(); it2 != finalRelation->tuples.end(); it2++) {
+//        Tuple t = (*it2);
+//        out += "  " + t.toString(headVals.attributes);
+//    }
+    
+    return out;
+}
+
+Relation* Interpreter::Copy(Relation* toBeCopied) {
+    Relation* rel = new Relation(toBeCopied->name, toBeCopied->header);
+    rel->tuples = toBeCopied->tuples;
+    return rel;
+}
+
+string Interpreter::EvaluateQueries() {
+    string out = "Query Evaluation\n";
     for (vector<Predicate*>::iterator it2 = datalog->queries.begin(); it2 != datalog->queries.end(); it2++) {
         Relation r = EvaluatePredicate((*it2));
 //        TestSet();
         
         //PRINT OUT RESULTS FOR LAB3
-        
-        string out = "Query Evaluation\n";
-        out = (*it2)->toString2() + " ";
-        int size = 0;
+        out += (*it2)->toString2() + " ";
+        unsigned int size = 0;
         for (set<Tuple>::iterator it = r.tuples.begin(); it != r.tuples.end(); it++) {
             size++;
         }
@@ -79,8 +188,8 @@ void Interpreter::EvaluateQueries() {
         if (!allConst) {
             out += r.toString();
         }
-        cout << out;
     }
+    return out;
 }
 
 Relation Interpreter::EvaluatePredicate(Predicate* p) {
@@ -91,8 +200,8 @@ Relation Interpreter::EvaluatePredicate(Predicate* p) {
 //    print the resulting relation
     Relation rel = *(database->relations[p->name]);
     map<int,string> variableMap;
-    int i = 0;
-    int j = 0;
+    unsigned int i = 0;
+    unsigned int j = 0;
     
     //SELECT
     for (vector <Parameter*>::iterator it = p->parameters.begin(); it != p->parameters.end(); it++) {
@@ -126,18 +235,11 @@ Relation Interpreter::EvaluatePredicate(Predicate* p) {
         pos.push_back((*it).first);
         newHeaderVals.push_back((*it).second);
     }
-    rel = *(rel.project(&rel, pos));
-    rel = *(rel.rename(&rel, newHeaderVals));
+    rel.project(pos);
+//    rel = *(rel.rename(&rel, newHeaderVals));
+    rel.renameHeader(newHeaderVals);
     
     return rel;
-}
-
-void Interpreter::EvaluateRules() {
-    
-//    for (vector<Rule*>::iterator it2 = datalog->rules.begin(); it2 != datalog->rules.end(); it2++) {
-//        Relation* r = r->NaturalJoin(*it2);
-//    }
-    
 }
 
 //void Interpreter::TestSet() {

@@ -15,6 +15,7 @@
 #include <string>
 #include <list>
 #include "Relation.h"
+//#include "Header.h"
 //#include "Interpreter.h"
 using namespace std;
 
@@ -23,6 +24,14 @@ class Database {
 public:
     Database() {}
     void addRelation(string name, Relation* relation) {
+        for (map<string,Relation*>::iterator it = this->relations.begin(); it != this->relations.end(); it++) {
+            if ((*it).first == name) {
+                (*it).second->header = relation->header;
+                (*it).second->tuples = relation->tuples;
+                return;
+            }
+        }
+        
         relations.insert(pair<string, Relation*>(name, relation));
     }
     void toString();
@@ -33,3 +42,13 @@ private:
 };
 
 #endif /* Database_h */
+
+
+
+//        for (map<string,Relation*>::iterator it = this->relations.begin(); it != this->relations.end(); it++) {
+//            for (set<Tuple>::iterator databaseTupleit = (*it).second->tuples.begin(); databaseTupleit != (*it).second->tuples.end(); databaseTupleit++) { //NOW I AM GOING THROUGH DATABASE TUPLES
+//                for (set<Tuple>::iterator relationTupleit = relation->tuples.begin(); relationTupleit != relation->tuples.end(); relationTupleit++) {
+//
+//                }
+//            }
+//        }

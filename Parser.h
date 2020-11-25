@@ -22,6 +22,7 @@ using namespace std;
 
 class Parser {
 public:
+    ~Parser();
     Parser(vector <Token*> t);
     void Match(TokenType type);
     void Parse();

@@ -6,13 +6,13 @@
 //  Copyright © 2020 Maddie Johnson. All rights reserved.
 //
 
-#include "TestParser.h"
+#include "Test.h"
 #include "Relation.h"
 #include <vector>
 using namespace std;
 #include <iostream>
 
-void TestParser::TestJoin() {
+void Test::TestJoin() {
     Parameter* one = new Parameter("cat", STRING);
     Parameter* two = new Parameter("dog", STRING);
     Parameter* three = new Parameter("fish", STRING);
@@ -150,6 +150,18 @@ void TestParser::TestJoin() {
     t10->AddToTuple(p35);
     
     second->AddTuple((*t10));
+    
+    Tuple* t11 = new Tuple();
+    Parameter* p36 = new Parameter("3", STRING);
+    Parameter* p37 = new Parameter("2", STRING);
+    Parameter* p38 = new Parameter("1", STRING);
+    Parameter* p39 = new Parameter("2", STRING);
+    t11->AddToTuple(p36);
+    t11->AddToTuple(p37);
+    t11->AddToTuple(p38);
+    t11->AddToTuple(p39);
+    
+    second->AddTuple((*t11));
     
     first->NaturalJoin(second);
 }

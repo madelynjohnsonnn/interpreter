@@ -20,11 +20,13 @@
 class Interpreter {
 public:
     Interpreter(DatalogProgram* dp);
-    //~Interpreter();
+    ~Interpreter();
     void Run();
     Relation EvaluatePredicate(Predicate* p);
-    void EvaluateQueries();
-    void EvaluateRules();
+    string EvaluateQueries();
+    string EvaluateRules();
+    Relation* Copy(Relation* toBeCopied);
+    unsigned long CountTuples();
 private:
     DatalogProgram* datalog;
     Database* database;

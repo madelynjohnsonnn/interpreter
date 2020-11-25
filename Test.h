@@ -1,20 +1,20 @@
 //
-//  TestParser.hpp
+//  Test.h
 //  lab1
 //
 //  Created by Maddie Johnson on 10/6/20.
 //  Copyright © 2020 Maddie Johnson. All rights reserved.
 //
 
-#ifndef TestParser_h
-#define TestParser_h
+#ifndef Test_h
+#define Test_h
 
 #include <stdio.h>
 
-class TestParser {
+class Test {
 public:
     void TestJoin();
 };
 
 
-#endif /* TestParser_hpp */
+#endif /* Test_h */

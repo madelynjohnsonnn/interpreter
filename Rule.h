@@ -28,10 +28,12 @@ public:
         bodyPredicates.push_back(bp);
     }
     
-    void toString();
-private:
+    string toString();
+    
     Predicate* headPredicate;
-    vector <Predicate*> bodyPredicates;
+    vector<Predicate*> bodyPredicates;
+private:
+    
 };
 
 #endif /* Rule_h */

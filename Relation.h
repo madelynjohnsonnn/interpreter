@@ -25,6 +25,7 @@ public:
         name = "";
     }
     void AddTuple(Tuple t);
+    bool AddTuple2(Tuple t);
 //    void SetHeader(Relation* oldRel, Relation* newRel);
 //    void SetName(Relation* oldRel, Relation* newRel);
     Header GetHeader(Relation* rel);
@@ -32,9 +33,11 @@ public:
     string toString();
     Relation* select1(Relation* r, int index, string value);
     Relation* select2(Relation* r, int index, int index2);
-    Relation* project(Relation* r, vector<int> pos);
-    Relation* rename(Relation* r, vector<string> newHeader);
-    void Unionize(Tuple t); //relational operator
+    void project(vector<int> pos);
+    void renameHeader(vector<string> newHeader); //for header
+//    Header renameHeader2(vector<string> newHeader);
+    void renameName(Relation r);
+    void Unionize(Relation r, Header headVals); //relational operator
     Relation* NaturalJoin(Relation* r); //relational operator
     Header CombineHeaders(Relation* r1, Relation* r2);
     Tuple GetTupleAtIndex(int index);
@@ -46,6 +49,7 @@ public:
     string name;
     Header header;
     set<Tuple> tuples; //coming from facts
+    bool tuplesAdded;
 private:
     
 };

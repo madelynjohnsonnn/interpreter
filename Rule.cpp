@@ -8,43 +8,45 @@
 
 #include "Rule.h"
 
-void Rule::toString() {
-    cout << "  " << headPredicate->GetName() << "(";
+string Rule::toString() {
+    string out;
+    out = headPredicate->GetName() + "(";
     vector <Parameter*>::iterator it;
     unsigned int i = 0;
     for (it = headPredicate->parameters.begin(); it != headPredicate->parameters.end(); it++) {
-        (*it)->toString();
+        out += (*it)->toString();
         i++;
         if (i < headPredicate->parameters.size()) {
-            cout << ",";
+            out += ",";
         }
     }
     
-    cout << ") :- ";
+    out += ") :- ";
     
     vector <Predicate*>::iterator it2;
     unsigned int j = 0;
     for (it2 = bodyPredicates.begin(); it2 != bodyPredicates.end(); it2++) {
         if (j > 0) {
-            cout << ",";
+            out += ",";
         }
         j++;
-        cout << (*it2)->GetName() << "(";
+        out += (*it2)->GetName() + "(";
         
         vector <Parameter*>::iterator it3;
         unsigned int k = 0;
         for (it3 = (*it2)->parameters.begin(); it3 != (*it2)->parameters.end(); it3++) {
-            (*it3)->toString();
+            out += (*it3)->toString();
             k++;
             if (k < (*it2)->parameters.size()) {
-                cout << ",";
+                out += ",";
             }
             else {
-                cout << ")";
+                out += ")";
             }
         }
     }
-    cout << "." << endl;
+    out += ".\n";
+    return out;
 }
 
 
