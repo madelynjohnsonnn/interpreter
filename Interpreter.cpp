@@ -133,29 +133,12 @@ string Interpreter::EvaluateRules() {
             }
         }
         
-//        Relation* temp = Copy(finalRelation);
-        
-        
-        
-        finalRelation->Unionize(ruleHeadPredicate, headVals);
+        out += ruleHeadPredicate.Unionize(*(finalRelation), headVals);
         
         //update headPred in database with new relation
-        database->addRelation(ruleHeadPredicate.name, finalRelation);
-        
+        database->addRelation(ruleHeadPredicate.name, &(ruleHeadPredicate));
     }
-    
-//    for (set<Tuple>::iterator it2 = finalRelation->tuples.begin(); it2 != finalRelation->tuples.end(); it2++) {
-//        Tuple t = (*it2);
-//        out += "  " + t.toString(headVals.attributes);
-//    }
-    
     return out;
-}
-
-Relation* Interpreter::Copy(Relation* toBeCopied) {
-    Relation* rel = new Relation(toBeCopied->name, toBeCopied->header);
-    rel->tuples = toBeCopied->tuples;
-    return rel;
 }
 
 string Interpreter::EvaluateQueries() {

@@ -25,7 +25,6 @@ public:
     Relation EvaluatePredicate(Predicate* p);
     string EvaluateQueries();
     string EvaluateRules();
-    Relation* Copy(Relation* toBeCopied);
     unsigned long CountTuples();
 private:
     DatalogProgram* datalog;

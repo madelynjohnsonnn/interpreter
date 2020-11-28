@@ -19,9 +19,9 @@
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    ifstream in("/Users/maddie/Downloads/Lab4PassOffCases/4-80/input0.txt");
+//    ifstream in("/Users/maddie/Downloads/Lab4PassOffCases/4-80/input0.txt");
 
-//    ifstream in(argv[1]);
+    ifstream in(argv[1]);
     stringstream buffer;
     buffer << in.rdbuf();
 
@@ -42,4 +42,5 @@ int main(int argc, const char * argv[]) {
     
 //    Test* t = new Test();
 //    t->TestJoin();
+
 }

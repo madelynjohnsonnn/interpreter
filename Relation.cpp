@@ -95,30 +95,20 @@ void Relation::renameHeader(vector<string> newHeader) {
     this->header.attributes = newAttributes;
 }
 
-//Header Relation::renameHeader2(vector<string> newHeader) {
-//    Header head;
-////    vector <Parameter*> newAttributes;
-//
-//    for (vector<string>::iterator it2 = newHeader.begin(); it2 != newHeader.end(); it2++) {
-//        Parameter* p = new Parameter((*it2),ID);
-//        head.AddAttribute(p);
-//    }
-//    return head;
-//}
-
 void Relation::renameName(Relation r) {
     this->name = r.name;
 }
 
-void Relation::Unionize(Relation r, Header headVals) {
+string Relation::Unionize(Relation r, Header headVals) {
     //insert new tuples into relation
-    
+    string out = "";
     for (set<Tuple>::iterator it = r.tuples.begin(); it != r.tuples.end(); it++) {
         if (this->tuples.insert((*it)).second == true) { //if it's new
-            //DO NOTHING, PRINTING IN EVALUATERULES()
+            Tuple tuple = (*it);
+            out += "  " + tuple.toString(headVals.attributes);
         }
     }
-    
+    return out;
 }
 
 Relation* Relation::NaturalJoin(Relation* r) {
@@ -158,9 +148,6 @@ Relation* Relation::NaturalJoin(Relation* r) {
         }
         i++;
     }
-    
-//    Relation* r1 = project(this->Copy(), pos1);
-//    Relation* r2 = project(r->Copy(), pos2);
     
     vector<Tuple> v1 = this->projectTuples(pos1);
     vector<Tuple> v2 = r->projectTuples(pos2);
@@ -231,7 +218,6 @@ Tuple Relation::GetTupleAtIndex(int index) {
     return *(nullTuple);
 }
 
-
 Relation* Relation::Copy() {
     Relation* returnVal = new Relation(this->name, this->header);
     for (set<Tuple>::iterator it = this->tuples.begin(); it != this->tuples.end(); it++) {
@@ -239,7 +225,6 @@ Relation* Relation::Copy() {
     }
     return returnVal;
 }
-
 
 vector<Tuple> Relation::projectTuples(vector<int> pos) {
     vector<Tuple> newTuples;
@@ -254,4 +239,13 @@ vector<Tuple> Relation::projectTuples(vector<int> pos) {
     }
     
     return newTuples;
+}
+
+vector<Tuple> Relation::GetTupleAsVector() {
+    vector<Tuple> tuples;
+    for (set<Tuple>::iterator it = this->tuples.begin(); it != this->tuples.end(); it++) {
+        tuples.push_back(*it);
+    }
+    
+    return tuples;
 }
