@@ -114,47 +114,52 @@ string Relation::Unionize(Relation r, Header headVals) {
 Relation* Relation::NaturalJoin(Relation* r) {
     tuplesAdded = false;
     Relation* joinedRelation = new Relation("result", CombineHeaders(this, r));
-    
+
     unsigned int i = 0;
+    unsigned int j = 0;
     vector<int> pos1;
+    vector<int> pos2;
+
     bool addVal = false;
     for (vector<Parameter*>::iterator it = this->header.attributes.begin(); it != this->header.attributes.end(); it++) {
         addVal = false;
+        j = 0;
         for (vector<Parameter*>::iterator it2 = r->header.attributes.begin(); it2 != r->header.attributes.end(); it2++) {
             if ((*it)->GetName() == (*it2)->GetName()) {
                 addVal = true;
-                break;
             }
-        }
-        if (addVal) {
-            pos1.push_back(i);
+            if (addVal) {
+                pos1.push_back(i);
+                pos2.push_back(j);
+            }
+            j++;
+            addVal = false;
         }
         i++;
     }
-    
-    i = 0;
-    vector<int> pos2;
-    addVal = false;
-    for (vector<Parameter*>::iterator it = r->header.attributes.begin(); it != r->header.attributes.end(); it++) {
-        addVal = false;
-        for (vector<Parameter*>::iterator it2 = this->header.attributes.begin(); it2 != this->header.attributes.end(); it2++) {
-            if ((*it)->GetName() == (*it2)->GetName()) {
-                addVal = true;
-                break;
-            }
-        }
-        if (addVal) {
-            pos2.push_back(i);
-        }
-        i++;
-    }
-    
+
+//    i = 0;
+//    addVal = false;
+//    for (vector<Parameter*>::iterator it = r->header.attributes.begin(); it != r->header.attributes.end(); it++) {
+//        addVal = false;
+//        for (vector<Parameter*>::iterator it2 = this->header.attributes.begin(); it2 != this->header.attributes.end(); it2++) {
+//            if ((*it)->GetName() == (*it2)->GetName()) {
+//                addVal = true;
+//                break;
+//            }
+//        }
+//        if (addVal) {
+//            pos2.push_back(i);
+//        }
+//        i++;
+//    }
+
     vector<Tuple> v1 = this->projectTuples(pos1);
     vector<Tuple> v2 = r->projectTuples(pos2);
     
     i = 0;
-    unsigned int j = 0;
-    unsigned int k = 0;
+    j = 0;
+    int k = 0;
     
     for (vector<Tuple>::iterator it = v1.begin(); it != v1.end(); it++) {
         j = 0;
@@ -207,7 +212,7 @@ Header Relation::CombineHeaders(Relation* r1, Relation* r2) {
 }
 
 Tuple Relation::GetTupleAtIndex(int index) {
-    unsigned int i = 0;
+    int i = 0;
     for (set<Tuple>::iterator it = this->tuples.begin(); it != this->tuples.end(); it++) {
         if (i == index) {
             return (*it);

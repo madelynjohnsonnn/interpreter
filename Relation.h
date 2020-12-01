@@ -14,6 +14,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "Tuple.h"
 #include "Header.h"
 using namespace std;

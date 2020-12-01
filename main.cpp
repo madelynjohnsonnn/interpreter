@@ -19,7 +19,8 @@
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-//    ifstream in("/Users/maddie/Downloads/Lab4PassOffCases/4-80/input0.txt");
+//    ifstream in("/Users/maddie/Downloads/school/Lab4PassOffCases/4-100/input3.txt");
+//    ifstream in("/Users/maddie/CODING/lab2/lab2/lab5a.txt");
 
     ifstream in(argv[1]);
     stringstream buffer;
